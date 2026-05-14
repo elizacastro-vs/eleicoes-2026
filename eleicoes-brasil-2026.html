@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eleições Brasil 2026 – Estudo Completo</title>
+<style>
+  :root {
+    --verde: #009C3B;
+    --amarelo: #FFDF00;
+    --azul: #002776;
+    --esq: #e74c3c;
+    --centro: #f39c12;
+    --dir: #2980b9;
+    --centro-dir: #8e44ad;
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --text: #1a1a2e;
+    --muted: #6c757d;
+    --border: #e0e4ea;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, var(--azul) 0%, #003a9e 50%, #001a5e 100%);
+    color: white;
+    padding: 40px 32px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,223,0,0.04) 30px, rgba(255,223,0,0.04) 31px);
+  }
+  header .badge {
+    display: inline-block;
+    background: var(--amarelo);
+    color: var(--azul);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+  }
+  header h1 { font-size: clamp(22px, 4vw, 38px); font-weight: 800; line-height: 1.15; position: relative; }
+  header h1 span { color: var(--amarelo); }
+  header p { margin-top: 10px; font-size: 14px; opacity: .75; position: relative; }
+  .header-dates {
+    display: flex; gap: 20px; margin-top: 20px; flex-wrap: wrap;
+  }
+  .date-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px; padding: 8px 16px;
+    font-size: 13px; position: relative;
+  }
+  .date-pill strong { display: block; font-size: 15px; color: var(--amarelo); }
+
+  /* Nav tabs */
+  nav {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex; gap: 4px;
+    overflow-x: auto;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  nav button {
+    padding: 14px 18px;
+    border: none; background: none; cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all .2s;
+  }
+  nav button:hover { color: var(--azul); }
+  nav button.active { color: var(--azul); border-bottom-color: var(--azul); }
+
+  /* Sections */
+  section { display: none; padding: 28px 24px; max-width: 1200px; margin: 0 auto; }
+  section.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--azul); }
+  .card p, .card li { font-size: 14px; line-height: 1.6; color: #444; }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+
+  /* Section title */
+  .section-title {
+    font-size: 20px; font-weight: 800; color: var(--azul);
+    margin-bottom: 6px;
+  }
+  .section-subtitle {
+    font-size: 13px; color: var(--muted); margin-bottom: 22px;
+  }
+
+  /* Cargo cards */
+  .cargo-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    border-top: 4px solid var(--azul);
+  }
+  .cargo-card .icon { font-size: 30px; margin-bottom: 10px; }
+  .cargo-card h4 { font-size: 15px; font-weight: 700; color: var(--azul); }
+  .cargo-card .vagas {
+    display: inline-block;
+    background: var(--azul);
+    color: white;
+    font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px;
+    margin: 6px 0;
+  }
+  .cargo-card p { font-size: 13px; color: #555; line-height: 1.5; }
+  .cargo-card ul { padding-left: 16px; font-size: 13px; color: #555; }
+
+  /* State table */
+  .state-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .state-table th {
+    background: var(--azul); color: white;
+    padding: 10px 12px; text-align: left;
+    font-size: 12px; font-weight: 600; letter-spacing: .5px;
+  }
+  .state-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .state-table tr:hover td { background: #f0f4ff; }
+  .state-table tr:nth-child(even) td { background: #f9fafc; }
+  .state-table tr:nth-child(even):hover td { background: #f0f4ff; }
+
+  /* Orientation badges */
+  .badge-esq   { background: #fde8e8; color: #c0392b; border: 1px solid #f5b7b1; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .badge-centro { background: #fef9e7; color: #b7770d; border: 1px solid #f9e4aa; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .badge-dir   { background: #eaf4fb; color: #1a5276; border: 1px solid #aed6f1; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .badge-cdir  { background: #f5eef8; color: #6c3483; border: 1px solid #d2b4de; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .badge-nova  { background: #e8f8f5; color: #1a7a5e; border: 1px solid #a3e4d7; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+  /* Status badges for governors */
+  .status-reeleicao { background: #d5f5e3; color: #196f3d; border: 1px solid #a9dfbf; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .status-novo      { background: #d6eaf8; color: #1a5276; border: 1px solid #a9cce3; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .status-senado    { background: #fdebd0; color: #784212; border: 1px solid #f0c38e; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .status-pres      { background: #fadbd8; color: #78281f; border: 1px solid #f1948a; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .status-fim       { background: #f2f3f4; color: #555; border: 1px solid #d5d8dc; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+  /* Region tabs */
+  .region-tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .region-tab {
+    padding: 8px 16px; border-radius: 24px;
+    border: 2px solid var(--border); background: white;
+    font-size: 13px; font-weight: 600; cursor: pointer; color: var(--muted);
+    transition: all .2s;
+  }
+  .region-tab:hover { border-color: var(--azul); color: var(--azul); }
+  .region-tab.active { background: var(--azul); color: white; border-color: var(--azul); }
+
+  /* Presidenciais */
+  .candidate-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    border-left: 5px solid #ccc;
+  }
+  .candidate-card.esq { border-left-color: var(--esq); }
+  .candidate-card.centro { border-left-color: var(--centro); }
+  .candidate-card.dir { border-left-color: var(--dir); }
+  .candidate-card.cdir { border-left-color: var(--centro-dir); }
+  .candidate-card h4 { font-size: 15px; font-weight: 700; }
+  .candidate-card .partido { font-size: 12px; color: var(--muted); margin: 2px 0 8px; }
+  .candidate-card p { font-size: 13px; color: #555; line-height: 1.5; }
+  .candidate-card .pesquisa {
+    margin-top: 10px;
+    font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .bar-bg { flex: 1; height: 6px; background: #e0e4ea; border-radius: 4px; }
+  .bar-fill { height: 6px; border-radius: 4px; }
+
+  /* Legend */
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #555; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Alert box */
+  .alert {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #856404;
+    margin-bottom: 16px;
+  }
+  .alert strong { display: block; margin-bottom: 4px; }
+
+  /* Coligação cards */
+  .colig-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .colig-card .region-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+  }
+  .colig-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .colig-card p { font-size: 13px; color: #555; line-height: 1.5; margin-bottom: 8px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+  /* Summary boxes */
+  .stat-box {
+    background: var(--azul);
+    color: white;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+  .stat-box .number { font-size: 36px; font-weight: 800; color: var(--amarelo); }
+  .stat-box .label { font-size: 13px; opacity: .85; margin-top: 4px; }
+
+  .stat-box.verde { background: var(--verde); }
+  .stat-box.red { background: #c0392b; }
+  .stat-box.orange { background: #e67e22; }
+
+  /* Scrollable table wrapper */
+  .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+
+  /* Footer */
+  footer {
+    background: var(--azul); color: rgba(255,255,255,0.7);
+    text-align: center; padding: 20px;
+    font-size: 12px; margin-top: 40px;
+  }
+
+  @media (max-width: 600px) {
+    header { padding: 24px 16px; }
+    section { padding: 16px; }
+    nav button { padding: 12px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">📊 Estudo Eleitoral</div>
+  <h1>Eleições Gerais <span>Brasil 2026</span></h1>
+  <p>Mapa completo: cargos em disputa · situação por estado · coligações e espectro político</p>
+  <div class="header-dates">
+    <div class="date-pill"><strong>4 OUT 2026</strong>1º Turno</div>
+    <div class="date-pill"><strong>25 OUT 2026</strong>2º Turno (se necessário)</div>
+    <div class="date-pill"><strong>+155 milhões</strong>Eleitores aptos</div>
+    <div class="date-pill"><strong>6 votos</strong>Por eleitor na urna</div>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showSection('visao-geral')">🗂 Visão Geral</button>
+  <button onclick="showSection('cargos')">🏛 Cargos</button>
+  <button onclick="showSection('estados')">🗺 Estados</button>
+  <button onclick="showSection('candidatos-gov')">👤 Candidatos a Gov.</button>
+  <button onclick="showSection('candidatos-sen')">🏛 Candidatos ao Senado</button>
+  <button onclick="showSection('presidencial')">🇧🇷 Corrida Presidencial</button>
+  <button onclick="showSection('coligacoes')">🤝 Coligações</button>
+  <button onclick="showSection('calendario')">📅 Calendário</button>
+</nav>
+
+<!-- ==================== VISÃO GERAL / DASHBOARD ==================== -->
+<section id="visao-geral" class="active">
+  <div class="section-title">Dashboard · Eleições Gerais 2026</div>
+  <div class="section-subtitle">Painel completo atualizado · abril/2026 · 1º turno: 4 out · 2º turno: 25 out</div>
+
+  <!-- KPIs principais -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px" id="kpi-grid">
+    <div class="stat-box" style="background:var(--azul)"><div class="number" id="kpi-eleitores">155M+</div><div class="label">Eleitores aptos</div></div>
+    <div class="stat-box verde"><div class="number">27</div><div class="label">Governadores em disputa</div></div>
+    <div class="stat-box" style="background:#c0392b"><div class="number">54</div><div class="label">Cadeiras no Senado (⅔)</div></div>
+    <div class="stat-box orange"><div class="number">513</div><div class="label">Dep. Federais</div></div>
+    <div class="stat-box" style="background:#8e44ad"><div class="number">1.059</div><div class="label">Dep. Estaduais/Distritais</div></div>
+    <div class="stat-box" style="background:#16a085"><div class="number">6</div><div class="label">Votos por eleitor na urna</div></div>
+  </div>
+
+  <!-- Alert destaque -->
+  <div class="alert" style="border-color:#002776;background:#eef2ff;color:#002776">
+    <strong>⚡ Ciclo eleitoral inédito</strong>
+    18 dos 27 governadores não podem disputar reeleição (2º mandato). Bolsonaro preso e inelegível. Direita fragmentada. Lula busca o 4º mandato — feito inédito na história republicana brasileira.
+  </div>
+
+  <!-- Linha 1: Situação dos governadores + Espectro ideológico -->
+  <div class="grid-2" style="margin-bottom:18px">
+
+    <!-- Card: situação governadores (visual) -->
+    <div class="card" style="padding:20px">
+      <h3 style="margin-bottom:14px">🏛 Situação dos 27 Governadores</h3>
+      <div id="gov-chart" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px" id="gov-legend"></div>
+    </div>
+
+    <!-- Card: espectro ideológico atual -->
+    <div class="card" style="padding:20px">
+      <h3 style="margin-bottom:14px">🎨 Espectro Ideológico dos Governos Estaduais</h3>
+      <div id="spec-chart" style="display:flex;flex-direction:column;gap:8px"></div>
+      <div id="spec-bars" style="margin-top:10px"></div>
+      <p style="font-size:11px;color:var(--muted);margin-top:10px">Baseado no partido e posicionamento do governador atual (abr/2026)</p>
+    </div>
+  </div>
+
+  <!-- Linha 2: Destino dos governadores que saíram + vagas totais -->
+  <div class="grid-2" style="margin-bottom:18px">
+
+    <div class="card" style="padding:20px">
+      <h3 style="margin-bottom:14px">🔀 Destino dos Governadores que Saíram</h3>
+      <div id="destino-chart"></div>
+    </div>
+
+    <div class="card" style="padding:20px">
+      <h3 style="margin-bottom:14px">📊 Total de Vagas por Cargo</h3>
+      <div id="vagas-chart" style="display:flex;flex-direction:column;gap:10px"></div>
+    </div>
+  </div>
+
+  <!-- Linha 3: Blocos políticos -->
+  <div style="font-size:16px;font-weight:800;color:var(--azul);margin-bottom:8px">🧩 Blocos Políticos em 2026</div>
+  <div class="grid-2" style="margin-bottom:18px">
+    <div class="card" style="border-left:5px solid #e74c3c">
+      <h3 style="color:#c0392b">🔴 Esquerda / Base Lulista</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0">
+        <span style="background:#fde8e8;color:#c0392b;border:1px solid #f5b7b1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PT</span>
+        <span style="background:#fde8e8;color:#c0392b;border:1px solid #f5b7b1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PSB</span>
+        <span style="background:#fde8e8;color:#c0392b;border:1px solid #f5b7b1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PSOL</span>
+        <span style="background:#fde8e8;color:#c0392b;border:1px solid #f5b7b1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PCdoB</span>
+        <span style="background:#fde8e8;color:#c0392b;border:1px solid #f5b7b1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PDT</span>
+        <span style="background:#fde8e8;color:#c0392b;border:1px solid #f5b7b1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">Rede</span>
+      </div>
+      <p style="font-size:13px;color:#555">Lula busca reeleição. Palanques fortes no Nordeste (BA, CE, PI, RN) e PA. Vice Alckmin (PSB) deve ser mantido.</p>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)"><strong>Governadores aliados atuais:</strong> BA (PT) · CE (PT) · PI (PT) · PB (PSB→vice) · PE (PSD aliado)</div>
+    </div>
+    <div class="card" style="border-left:5px solid #2980b9">
+      <h3 style="color:#1a5276">🔵 Direita / Oposição</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0">
+        <span style="background:#eaf4fb;color:#1a5276;border:1px solid #aed6f1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PL</span>
+        <span style="background:#eaf4fb;color:#1a5276;border:1px solid #aed6f1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">Republicanos</span>
+        <span style="background:#eaf4fb;color:#1a5276;border:1px solid #aed6f1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">Novo</span>
+        <span style="background:#eaf4fb;color:#1a5276;border:1px solid #aed6f1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PP¹</span>
+        <span style="background:#eaf4fb;color:#1a5276;border:1px solid #aed6f1;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">União Brasil¹</span>
+      </div>
+      <p style="font-size:13px;color:#555">Bolsonaro inelegível e preso. Direita chega fragmentada. Tarcísio é a grande incógnita: reeleição em SP ou candidatura presidencial?</p>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)"><strong>Governadores atuais:</strong> SP (Republicanos) · SC (PL) · AC, PR (PP) · MS, GO (vice MDB/PSD)</div>
+    </div>
+    <div class="card" style="border-left:5px solid #f39c12">
+      <h3 style="color:#9a5e00">🟡 Centrão / Campo do Meio</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0">
+        <span style="background:#fef9e7;color:#b7770d;border:1px solid #f9e4aa;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">MDB</span>
+        <span style="background:#fef9e7;color:#b7770d;border:1px solid #f9e4aa;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PSD</span>
+        <span style="background:#fef9e7;color:#b7770d;border:1px solid #f9e4aa;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">União Brasil¹</span>
+        <span style="background:#fef9e7;color:#b7770d;border:1px solid #f9e4aa;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700">PP¹</span>
+      </div>
+      <p style="font-size:13px;color:#555">Posição ambígua: ministérios no governo Lula, mas simpatia interna por Tarcísio. PSD escolheu Caiado para a Presidência. Estratégia local independente da aliança federal.</p>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)">¹ PP e União Brasil têm alas em ambos os campos; posição definitiva apenas nas convenções (jul/ago).</div>
+    </div>
+    <div class="card" style="border-left:5px solid #555">
+      <h3>📌 Principais Incógnitas para outubro</h3>
+      <ul style="font-size:13px;color:#444;line-height:1.8">
+        <li>🎯 <strong>Tarcísio:</strong> reeleição em SP ou candidatura presidencial?</li>
+        <li>⚖️ <strong>RJ:</strong> STF decide eleição direta ou indireta para governador</li>
+        <li>🏛 <strong>Senado:</strong> governo Lula tem dificuldade de maioria (10 vs 17 oposição entre os que ficam)</li>
+        <li>🔀 <strong>MA:</strong> racha PSB × PT abre espaço inédito no Nordeste</li>
+        <li>⚠️ <strong>RR:</strong> processo de cassação no TSE pode mudar o quadro</li>
+        <li>🗳 <strong>Convenções:</strong> coligações formais só em 20/jul–5/ago/2026</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Linha 4: Pesquisas recentes -->
+  <div style="font-size:16px;font-weight:800;color:var(--azul);margin-bottom:4px">📊 Últimas Pesquisas · Atualizado 13/mai/2026</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Fontes: Genial/Quaest (13/mai), Futura Inteligência (11/mai), AtlasIntel/Bloomberg (28/abr), Vox Brasil (26/abr), Paraná Pesquisas (24/abr)</div>
+
+  <!-- Contexto político da semana -->
+  <div class="card" style="margin-bottom:14px;padding:16px;border-left:4px solid #e67e22;background:#fffbf0">
+    <div style="font-size:13px;font-weight:700;color:#9a5e00;margin-bottom:8px">⚡ Contexto político — semana de 7–13/mai/2026</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;font-size:12px;color:#555">
+      <div><strong>🤝 Lula × Trump (EUA):</strong> Reunião de +3h em Washington, considerada vitória diplomática. Lula neutralizou narrativa bolsonarista de isolamento internacional. Sem Marco Rubio na mesa — sinal de recuo da ala ideológica pró-Bolsonaro no governo Trump.</div>
+      <div><strong>⚖️ Operação PF — Caso Master:</strong> PF deflagrou 5ª fase da Operação Compliance Zero contra Ciro Nogueira (PP-PI), cotado para vice de Flávio. Suspeita de mensalidade de R$500 mil do banqueiro Daniel Vorcaro. Desgaste no núcleo bolsonarista.</div>
+      <div><strong>🏛️ Congresso:</strong> Senado rejeitou indicação de Jorge Messias ao STF. Câmara derrubou vetos presidenciais ao PL da Dosimetria. Governo reagiu aprovando marco dos minerais críticos. PEC do fim da escala 6x1 deve ir ao plenário em maio.</div>
+    </div>
+  </div>
+
+  <!-- Presidencial -->
+  <div class="card" style="margin-bottom:14px;padding:18px">
+    <div style="font-size:14px;font-weight:700;color:var(--azul);margin-bottom:4px">🇧🇷 Presidência da República — 1º Turno</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">Genial/Quaest · 2.004 eleitores presenciais · margem ±2pp · 7–11/mai/2026 · <strong>pesquisa mais recente disponível</strong></div>
+    <div style="display:flex;flex-direction:column;gap:8px" id="pres-bars">
+      ${[
+        { nome:'Lula (PT)', pct:39, cor:'#c0392b', nota:'Subiu de 37% para 39%. Reunião com Trump ajudou com independentes (+5pp desde março). 90% de fidelidade entre lulistas.' },
+        { nome:'Flávio Bolsonaro (PL)', pct:33, cor:'#1a5276', nota:'Oscilou de 32% para 33%. Caso Master/Ciro Nogueira ainda não impactou seu núcleo duro (90% fidelidade entre bolsonaristas). Soma Lula+Flávio = 72% do eleitorado.' },
+        { nome:'Ronaldo Caiado (PSD)', pct:4, cor:'#8e44ad', nota:'Caiu de 6% para 4%. Perda de espaço após convenções internas e foco no ciclo de debates.' },
+        { nome:'Romeu Zema (Novo)', pct:4, cor:'#6c3483', nota:'Subiu de 3% para 4%. Continua sendo o mais competitivo fora da polarização PT×PL. 2º turno vs Lula: 37% × 44%.' },
+        { nome:'Outros / Indecisos', pct:20, cor:'#bbb', nota:'Renan Santos, Cury, Daciolo, Aldo Rebelo, Samara Martins: todos abaixo de 2%. Polarização em alta.' },
+      ].map(c => `
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:170px;font-size:12px;font-weight:600;color:#333;flex-shrink:0">${c.nome}</div>
+          <div style="flex:1;background:#eee;border-radius:6px;height:20px;overflow:hidden">
+            <div style="width:${c.pct*2}%;background:${c.cor};height:100%;border-radius:6px;display:flex;align-items:center;padding:0 8px">
+              <span style="font-size:11px;font-weight:700;color:white">${c.pct}%</span>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);flex:1;min-width:0">${c.nota}</div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="font-size:11px;color:#1a5276;background:#eaf4fb;border:1px solid #aed6f1;border-radius:8px;padding:8px">
+        <strong>2º turno Lula × Flávio (Quaest, 13/mai):</strong><br>Lula 42% × Flávio 41% — empate técnico (±2pp). Em abril era 42% × 42%.
+      </div>
+      <div style="font-size:11px;color:#784212;background:#fdebd0;border:1px solid #f0c38e;border-radius:8px;padding:8px">
+        <strong>Futura Inteligência (11/mai, ±2,2pp):</strong><br>Lula e Flávio empatados no 1º e 2º turno. Sem Lula, Flávio abre vantagem sobre Haddad.
+      </div>
+    </div>
+  </div>
+
+  <!-- Mapa regional -->
+  <div class="card" style="margin-bottom:14px;padding:18px">
+    <div style="font-size:14px;font-weight:700;color:var(--azul);margin-bottom:10px">🗺 Mapa Regional — Quaest por estado (Genial/Quaest, fim de abril/2026)</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">
+      <div style="background:#fde8e8;border:1px solid #f5b7b1;border-radius:10px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:#c0392b;margin-bottom:6px">🔴 Lula lidera com folga</div>
+        <div style="font-size:12px;color:#555;line-height:1.6">
+          <strong>PE:</strong> Lula +34pp sobre Flávio<br>
+          <strong>BA:</strong> Lula +33pp<br>
+          <strong>CE, PI, RN:</strong> Nordeste sólido<br>
+          <strong>PA:</strong> Norte amazônico
+        </div>
+      </div>
+      <div style="background:#fef9e7;border:1px solid #f9e4aa;border-radius:10px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:#9a5e00;margin-bottom:6px">🟡 Disputa acirrada / Indeciso</div>
+        <div style="font-size:12px;color:#555;line-height:1.6">
+          <strong>MG:</strong> "Estado-pêndulo" — histórico define o presidente<br>
+          <strong>RJ:</strong> Flávio forte localmente<br>
+          <strong>ES:</strong> Centro volátil
+        </div>
+      </div>
+      <div style="background:#eaf4fb;border:1px solid #aed6f1;border-radius:10px;padding:12px">
+        <div style="font-size:12px;font-weight:700;color:#1a5276;margin-bottom:6px">🔵 Flávio lidera com folga</div>
+        <div style="font-size:12px;color:#555;line-height:1.6">
+          <strong>GO:</strong> Flávio +13pp (agro)<br>
+          <strong>SP:</strong> Flávio 45,3% × Lula 34,5%<br>
+          <strong>SC, RS, PR:</strong> Sul dominantemente à direita<br>
+          <strong>MT, MS:</strong> Centro-Oeste agro
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px">Independentes: Lula cresceu de 21% para 26% neste grupo desde março. Flávio tem 29% entre independentes no 2º turno. Decisão final será neste segmento.</div>
+  </div>
+
+  <!-- Grid pesquisas estaduais -->
+  <div style="font-size:14px;font-weight:700;color:var(--azul);margin-bottom:10px">🗺 Pesquisas Estaduais — Governadores</div>
+  <div class="grid-2" style="margin-bottom:18px">
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🏙 São Paulo</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Vox Brasil · 1.480 eleitores · 22–25/abr · ±2pp</div>
+      ${[
+        {n:'Tarcísio de Freitas (Rep.)',v:48,c:'#1a5276'},
+        {n:'Fernando Haddad (PT)',v:32,c:'#c0392b'},
+        {n:'Paulo Serra (PSDB)',v:5,c:'#8e44ad'},
+        {n:'Kim Kataguiri (Missão)',v:3,c:'#555'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${x.v*2}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">2º turno: Tarcísio 54,2% × Haddad 34,6% · Aprovação Tarcísio: 68,2% · Rejeição Haddad: 45,6%</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🏙 Rio de Janeiro</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Paraná Pesquisas · 1.680 eleitores · 21–23/abr · ±2,4pp</div>
+      ${[
+        {n:'Eduardo Paes (PSD)',v:40,c:'#c0392b'},
+        {n:'Douglas Ruas (PL)',v:10,c:'#1a5276'},
+        {n:'Anthony Garotinho (Rep.)',v:8,c:'#8e44ad'},
+        {n:'Indecisos/Brancos',v:22,c:'#bbb'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${Math.min(x.v*2,100)}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">2º turno Paes × Ruas: ~40pp de vantagem para Paes · Aprovação Castro caiu 53%→35%</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🏙 Minas Gerais</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Genial/Quaest · 1.482 eleitores · 22–26/abr · ±3pp</div>
+      ${[
+        {n:'Cleitinho (Republicanos)',v:38,c:'#1a5276'},
+        {n:'Alexandre Kalil (PDT)',v:19,c:'#c0392b'},
+        {n:'Rodrigo Pacheco (PSB)',v:17,c:'#e67e22'},
+        {n:'Mateus Simões (PSD)',v:12,c:'#8e44ad'},
+        {n:'Flávio Roscoe (PL)',v:5,c:'#555'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${x.v*2}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Cleitinho vence todos no 2º turno com ≥15pp · Sem Cleitinho: empate Kalil × Pacheco · Senado: Marília Campos (PT) lidera</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🌾 Paraná</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Genial/Quaest · 1.104 eleitores · 21–25/abr · ±3pp</div>
+      ${[
+        {n:'Sergio Moro (PL)',v:35,c:'#1a5276'},
+        {n:'Requião Filho (PDT)',v:18,c:'#c0392b'},
+        {n:'Rafael Greca (MDB)',v:15,c:'#e67e22'},
+        {n:'Sandro Alex (PSD)',v:5,c:'#8e44ad'},
+        {n:'Indecisos',v:18,c:'#bbb'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${Math.min(x.v*2,100)}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Moro vence todos os 2ºs turnos · 67% ainda podem mudar o voto · Aprov. Ratinho Jr.: 80%</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🌳 Pará</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Genial/Quaest · 900 eleitores · 21–25/abr · ±3pp</div>
+      ${[
+        {n:'Hana Ghassan (MDB)',v:30,c:'#c0392b'},
+        {n:'Daniel Santos (Podemos)',v:28,c:'#e67e22'},
+        {n:'Zé Vitor (direita)',v:11,c:'#1a5276'},
+        {n:'Indecisos',v:20,c:'#bbb'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${Math.min(x.v*2.5,100)}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">⚡ Empate técnico Hana × Daniel Santos · 2º turno também empatado · 67% ainda podem mudar o voto</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">📌 Destaques — outras pesquisas</div>
+      <div style="font-size:12px;color:#444;line-height:1.8">
+        <div style="margin-bottom:5px">🏙 <strong>ES</strong> — Pazolini (Rep.) e Ferraço (PSD) empatam ~28–30% (Real Time Big Data)</div>
+        <div style="margin-bottom:5px">🌴 <strong>PE</strong> — João Campos (PSB) lidera com 59% (Real Time Big Data)</div>
+        <div style="margin-bottom:5px">🌵 <strong>GO</strong> — Daniel Vilela (MDB) com 42%+ (AtlasIntel)</div>
+        <div style="margin-bottom:5px">🌵 <strong>MS</strong> — Flávio lidera presidencial com 42,6% (Ranking Brasil, 3–7/mai)</div>
+        <div>🌵 <strong>MT</strong> — Wellington Fagundes (PL) lidera pesquisas do estado</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Linha 5: Contador regressivo -->
+  <div class="card" style="background:linear-gradient(135deg,var(--azul),#003a9e);color:white;text-align:center;padding:24px">
+
+  <!-- Presidencial -->
+  <div class="card" style="margin-bottom:14px;padding:18px">
+    <div style="font-size:14px;font-weight:700;color:var(--azul);margin-bottom:12px">🇧🇷 Presidência da República — 1º Turno</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:10px">AtlasIntel/Bloomberg · 5.008 eleitores · margem ±1pp · 22–27/abr</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${[
+        { nome:'Lula (PT)', pct:38, cor:'#c0392b', nota:'Lidera 4–6pp sobre Flávio. 2º turno: empate técnico com Flávio (margem ±1pp).' },
+        { nome:'Flávio Bolsonaro (PL)', pct:33, cor:'#1a5276', nota:'Lidera numericamente o 2º turno, mas empatado com Lula dentro da margem.' },
+        { nome:'Ronaldo Caiado (PSD)', pct:9, cor:'#8e44ad', nota:'Perderia para Lula no 2º turno segundo a AtlasIntel.' },
+        { nome:'Romeu Zema (Novo)', pct:7, cor:'#6c3483', nota:'Empatado tecnicamente com Lula no 2º turno (Nexus/BTG, ±2pp).' },
+        { nome:'Tarcísio (Republicanos)', pct:6, cor:'#2980b9', nota:'Ainda não candidato oficial — não testado em todos os cenários.' },
+      ].map(c => `
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:170px;font-size:12px;font-weight:600;color:#333;flex-shrink:0">${c.nome}</div>
+          <div style="flex:1;background:#eee;border-radius:6px;height:20px;overflow:hidden">
+            <div style="width:${c.pct*2}%;background:${c.cor};height:100%;border-radius:6px;display:flex;align-items:center;padding:0 8px">
+              <span style="font-size:11px;font-weight:700;color:white">${c.pct}%</span>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);flex:1;min-width:0">${c.nota}</div>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:#856404;background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:8px">
+      ⚡ <strong>Nexus/BTG (27/abr, 2.028 eleitores):</strong> 69% dos eleitores dizem que a decisão de voto já está tomada e não muda. Lula empata tecnicamente com Flávio, Caiado e Zema no 2º turno (±2pp). Lula e Flávio são os mais rejeitados.
+    </div>
+  </div>
+
+  <!-- Grid pesquisas estaduais -->
+  <div style="font-size:14px;font-weight:700;color:var(--azul);margin-bottom:10px">🗺 Pesquisas Estaduais — Governadores</div>
+  <div class="grid-2" style="margin-bottom:18px">
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🏙 São Paulo</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Vox Brasil · 1.480 eleitores · 22–25/abr · ±2pp</div>
+      ${[
+        {n:'Tarcísio de Freitas (Rep.)',v:48,c:'#1a5276'},
+        {n:'Fernando Haddad (PT)',v:32,c:'#c0392b'},
+        {n:'Paulo Serra (PSDB)',v:5,c:'#8e44ad'},
+        {n:'Kim Kataguiri (Missão)',v:3,c:'#555'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${x.v*2}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">2º turno: Tarcísio 54,2% × Haddad 34,6% · Aprovação Tarcísio: 68,2%</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🏙 Rio de Janeiro</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Paraná Pesquisas · 1.680 eleitores · 21–23/abr · ±2,4pp</div>
+      ${[
+        {n:'Eduardo Paes (PSD)',v:40,c:'#c0392b'},
+        {n:'Douglas Ruas (PL)',v:10,c:'#1a5276'},
+        {n:'Anthony Garotinho (Rep.)',v:8,c:'#8e44ad'},
+        {n:'Indecisos/Brancos',v:22,c:'#bbb'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${Math.min(x.v*2,100)}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">2º turno Paes × Ruas: Paes vence com ~40pp de vantagem. Aprovação Castro caiu para 35% (era 53% em out/25).</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🏙 Minas Gerais</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Genial/Quaest · 1.482 eleitores · 22–26/abr · ±3pp</div>
+      ${[
+        {n:'Cleitinho (Republicanos)',v:38,c:'#1a5276'},
+        {n:'Alexandre Kalil (PDT)',v:19,c:'#c0392b'},
+        {n:'Rodrigo Pacheco (PSB)',v:17,c:'#e67e22'},
+        {n:'Mateus Simões (PSD)',v:12,c:'#8e44ad'},
+        {n:'Flávio Roscoe (PL)',v:5,c:'#555'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${x.v*2}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Cleitinho venceria todos no 2º turno com ≥15pp de vantagem. Sem Cleitinho: empate técnico Kalil × Pacheco. Senado: Marília Campos (PT) lidera.</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🌾 Paraná</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Genial/Quaest · 1.104 eleitores · 21–25/abr · ±3pp</div>
+      ${[
+        {n:'Sergio Moro (PL)',v:35,c:'#1a5276'},
+        {n:'Requião Filho (PDT)',v:18,c:'#c0392b'},
+        {n:'Rafael Greca (MDB)',v:15,c:'#e67e22'},
+        {n:'Sandro Alex (PSD)',v:5,c:'#8e44ad'},
+        {n:'Indecisos',v:18,c:'#bbb'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${Math.min(x.v*2,100)}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">Moro lidera todos os 2ºs turnos: 49% × 30% (Requião), 44% × 29% (Greca). Aprov. Ratinho Jr.: 80%. 67% dos eleitores ainda podem mudar o voto.</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">🌳 Pará</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">Genial/Quaest · 900 eleitores · 21–25/abr · ±3pp</div>
+      ${[
+        {n:'Hana Ghassan (MDB)',v:30,c:'#c0392b'},
+        {n:'Daniel Santos (Podemos)',v:28,c:'#e67e22'},
+        {n:'Zé Vitor (direita)',v:11,c:'#1a5276'},
+        {n:'Indecisos',v:20,c:'#bbb'},
+      ].map(x=>`<div style="margin-bottom:5px">
+        <div style="display:flex;justify-content:space-between;font-size:12px"><span>${x.n}</span><strong style="color:${x.c}">${x.v}%</strong></div>
+        <div style="background:#eee;border-radius:4px;height:8px"><div style="width:${Math.min(x.v*2.5,100)}%;background:${x.c};height:8px;border-radius:4px"></div></div>
+      </div>`).join('')}
+      <div style="font-size:11px;color:var(--muted);margin-top:6px">⚡ Empate técnico Hana × Daniel Santos (dentro da margem ±3pp). 2º turno também empatado. Alta volatilidade: 67% ainda podem mudar o voto.</div>
+    </div>
+
+    <div class="card" style="padding:16px">
+      <div style="font-weight:700;font-size:13px;margin-bottom:4px">📌 Destaques de outras pesquisas</div>
+      <div style="font-size:12px;color:#444;line-height:1.7">
+        <div style="margin-bottom:6px">🏙 <strong>ES</strong> — Pazolini (Rep.) e Ferraço (PSD) empatam em ~28–30% (Real Time, out/25). Campo aberto.</div>
+        <div style="margin-bottom:6px">🌴 <strong>PE</strong> — João Campos (PSB) lidera com 59% (Real Time, set/25). Raquel Lyra: 24%.</div>
+        <div style="margin-bottom:6px">🌵 <strong>GO</strong> — Daniel Vilela (MDB) com 42%+ em todos os cenários (AtlasIntel, set/25).</div>
+        <div style="margin-bottom:6px">🌵 <strong>MS</strong> — Riedel (PP) com 51%, Fábio Trad (PT) 10% (Real Time, set/25).</div>
+        <div>🌵 <strong>MT</strong> — Wellington Fagundes (PL) liderava pesquisas do estado (Real Time, set/25).</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Linha 5: Contador regressivo -->
+  <div class="card" style="background:linear-gradient(135deg,var(--azul),#003a9e);color:white;text-align:center;padding:24px">
+    <div style="font-size:13px;opacity:.8;margin-bottom:8px">⏳ Contagem regressiva para o 1º turno</div>
+    <div id="countdown" style="font-size:28px;font-weight:800;color:var(--amarelo);letter-spacing:2px">calculando...</div>
+    <div style="font-size:12px;opacity:.7;margin-top:6px">4 de outubro de 2026 · 08h00 (horário de Brasília)</div>
+  </div>
+
+</section>
+
+<!-- ==================== CARGOS ==================== -->
+<section id="cargos">
+  <div class="section-title">Cargos em Disputa</div>
+  <div class="section-subtitle">Todos os cargos que o eleitor escolherá em 4 de outubro de 2026</div>
+
+  <div class="alert">
+    <strong>🗳 Ordem dos votos na urna eletrônica:</strong>
+    1º Deputado Federal · 2º Deputado Estadual/Distrital · 3º Senador (1ª vaga) · 4º Senador (2ª vaga) · 5º Governador · 6º Presidente da República
+  </div>
+
+  <div class="grid-2" style="margin-bottom:22px">
+    <div class="cargo-card" style="border-top-color:#002776">
+      <div class="icon">🇧🇷</div>
+      <h4>Presidente da República</h4>
+      <span class="vagas">1 chapa (presidente + vice)</span>
+      <p>Sistema <strong>majoritário absoluto</strong>: precisa de mais de 50% dos votos válidos para vencer no 1º turno. Caso contrário, 2º turno entre os dois mais votados em 25/out.</p>
+      <ul style="margin-top:10px">
+        <li>Mandato: 4 anos (jan/2027 – jan/2031)</li>
+        <li>Elegibilidade: mínimo 35 anos</li>
+        <li>Chefe de Estado e Chefe de Governo</li>
+      </ul>
+    </div>
+    <div class="cargo-card" style="border-top-color:#009C3B">
+      <div class="icon">🏛</div>
+      <h4>Governadores de Estado e DF</h4>
+      <span class="vagas">27 chapas</span>
+      <p>Sistema <strong>majoritário absoluto</strong>: 26 estados + Distrito Federal. Mesmo critério do presidente: 50%+1 no 1º turno ou 2º turno.</p>
+      <ul style="margin-top:10px">
+        <li>Mandato: 4 anos</li>
+        <li>Elegibilidade: mínimo 30 anos</li>
+        <li>Chefe do Executivo estadual</li>
+      </ul>
+    </div>
+    <div class="cargo-card" style="border-top-color:#c0392b">
+      <div class="icon">🏛</div>
+      <h4>Senadores Federais</h4>
+      <span class="vagas">54 vagas (2/3 do Senado)</span>
+      <p>Sistema <strong>majoritário simples</strong>: cada estado elege <strong>2 senadores</strong>. Os dois mais votados são eleitos diretamente, sem necessidade de 2º turno.</p>
+      <ul style="margin-top:10px">
+        <li>Mandato: 8 anos</li>
+        <li>Elegibilidade: mínimo 35 anos</li>
+        <li>Cada senador tem 2 suplentes</li>
+        <li>2030: renovação de 1/3 (1 por estado)</li>
+      </ul>
+    </div>
+    <div class="cargo-card" style="border-top-color:#e67e22">
+      <div class="icon">🏛</div>
+      <h4>Deputados Federais</h4>
+      <span class="vagas">513 vagas na Câmara</span>
+      <p>Sistema <strong>proporcional</strong>: vagas distribuídas por estado conforme população. Candidatos eleitos pelos mais votados dentro da legenda, respeitando o quociente eleitoral.</p>
+      <ul style="margin-top:10px">
+        <li>Mandato: 4 anos</li>
+        <li>Elegibilidade: mínimo 21 anos</li>
+        <li>MG tem mais vagas: 53 deputados</li>
+        <li>SP: ~70 vagas (maior bancada)</li>
+      </ul>
+    </div>
+    <div class="cargo-card" style="border-top-color:#8e44ad">
+      <div class="icon">🏛</div>
+      <h4>Deputados Estaduais</h4>
+      <span class="vagas">1.035 vagas nas Assembleias</span>
+      <p>Sistema <strong>proporcional</strong>: cada estado elege sua própria Assembleia Legislativa. Número de deputados varia por estado (ex: SP tem 94, menor estado ~24).</p>
+      <ul style="margin-top:10px">
+        <li>Mandato: 4 anos</li>
+        <li>Elegibilidade: mínimo 21 anos</li>
+        <li>Fiscalizam e legislam em âmbito estadual</li>
+      </ul>
+    </div>
+    <div class="cargo-card" style="border-top-color:#16a085">
+      <div class="icon">🏛</div>
+      <h4>Deputados Distritais (DF)</h4>
+      <span class="vagas">24 vagas na Câmara Legislativa/DF</span>
+      <p>Sistema <strong>proporcional</strong>: exclusivo do Distrito Federal. Deputados distritais legislam sobre matérias do DF, acumulando as funções de deputado estadual e vereador.</p>
+      <ul style="margin-top:10px">
+        <li>Mandato: 4 anos</li>
+        <li>Eleitos pelos moradores do DF</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ESTADOS ==================== -->
+<section id="estados">
+  <div class="section-title">Situação por Estado</div>
+  <div class="section-subtitle">Ordenação alfabética · Governador atual · motivo da saída · cenário 2026 · deputados</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#196f3d"></div>Disputa Reeleição</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#1a5276"></div>Vice Assume / Candidato Novo</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#784212"></div>Migrou para Senado</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#78281f"></div>Candidato à Presidência</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#555"></div>Encerra Mandato (2º mandato)</div>
+  </div>
+
+  <div class="region-tabs">
+    <button class="region-tab active" onclick="filterRegion('todos', this)">🇧🇷 Todos (27)</button>
+    <button class="region-tab" onclick="filterRegion('nordeste', this)">🌴 Nordeste (9)</button>
+    <button class="region-tab" onclick="filterRegion('sudeste', this)">🏙 Sudeste (4)</button>
+    <button class="region-tab" onclick="filterRegion('sul', this)">🌾 Sul (3)</button>
+    <button class="region-tab" onclick="filterRegion('centrooeste', this)">🌵 Centro-Oeste (4)</button>
+    <button class="region-tab" onclick="filterRegion('norte', this)">🌳 Norte (7)</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="state-table" id="stateTable">
+      <thead>
+        <tr>
+          <th>UF</th>
+          <th>Estado</th>
+          <th>Região</th>
+          <th>Governador Atual / Situação</th>
+          <th>Partido</th>
+          <th>Status Eleitoral</th>
+          <th>Motivo da Saída / Situação do Gov.</th>
+          <th>Cenário Governador 2026</th>
+          <th>Dep. Federais</th>
+          <th>Dep. Estaduais</th>
+          <th>Senadores em disputa</th>
+        </tr>
+      </thead>
+      <tbody id="stateBody"></tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--muted);margin-top:10px">* Vagas de deputados federais por estado/DF conforme TSE. Senado: cada estado e DF elegem 2 senadores em 2026 (renovação de 2/3 — 54 das 81 cadeiras). Dep. estaduais: conforme Constituição Estadual e proporcionalidade. O DF elege deputados distritais (24) em vez de estaduais, mas também elege 8 deputados federais e 2 senadores.</p>
+</section>
+
+<!-- ==================== PRESIDENCIAL ==================== -->
+<section id="presidencial">
+  <div class="section-title">Corrida Presidencial 2026</div>
+  <div class="section-subtitle">Pré-candidatos e alinhamentos políticos</div>
+
+  <div class="alert">
+    <strong>⚠️ Convenções partidárias: 20/jul a 5/ago/2026</strong>
+    As candidaturas e coligações oficiais só serão formalizadas neste período. Até lá, tudo são pré-candidaturas. Bolsonaro está preso e inelegível por 27 anos (golpe de Estado). Tarcísio sinalizou reeleição em SP, mas não descartou presidência.
+  </div>
+
+  <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;color:var(--azul)">🔴 Esquerda / Campo Lulista</h3>
+  <div class="grid-2" style="margin-bottom:22px">
+    <div class="candidate-card esq">
+      <h4>Luiz Inácio Lula da Silva</h4>
+      <div class="partido">PT · Presidente em exercício · pré-candidato à reeleição</div>
+      <p>Busca reeleição. Quaest (13/mai): <strong>39% no 1º turno</strong> (+2pp desde abril). Reunião com Trump em Washington (semana de 7/mai) ajudou com independentes (+5pp desde março). No 2º turno: 42% × 41% de Flávio — empate técnico (±2pp). É o mais rejeitado junto com Flávio. Entre lulistas: 94% de fidelidade.</p>
+      <div class="pesquisa">
+        <span>39% 1º turno (Quaest, 13/mai)</span>
+        <div class="bar-bg"><div class="bar-fill" style="width:39%;background:var(--esq)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;color:var(--azul)">🔵 Direita / Oposição</h3>
+  <div class="grid-2" style="margin-bottom:22px">
+    <div class="candidate-card dir">
+      <h4>Flávio Bolsonaro</h4>
+      <div class="partido">PL · Senador (RJ) · representante do clã Bolsonaro</div>
+      <p>Quaest (13/mai): <strong>33% no 1º turno</strong>, estável (+1pp). Caso Master/Ciro Nogueira ainda não impactou seu núcleo duro (90% fidelidade entre bolsonaristas). Estrategista "Marcelão" também ligado ao escândalo. Vice em aberto. Em SP lidera com 45,3% × Lula 34,5%. Junto com Lula, o mais rejeitado do país.</p>
+      <div class="pesquisa">
+        <span>33% 1º turno (Quaest, 13/mai)</span>
+        <div class="bar-bg"><div class="bar-fill" style="width:33%;background:var(--dir)"></div></div>
+      </div>
+    </div>
+    <div class="candidate-card cdir">
+      <h4>Tarcísio de Freitas</h4>
+      <div class="partido">Republicanos · Governador de SP · pré-candidato indefinido</div>
+      <p>Cenário aberto: pode disputar reeleição em SP ou migrar para a Presidência. É o nome preferido de 48% dos parlamentares de direita como candidato unificador. Decidirá após convenções.</p>
+      <div class="pesquisa">
+        <span>~20–25% (se candidato à Presidência)</span>
+        <div class="bar-bg"><div class="bar-fill" style="width:22%;background:var(--centro-dir)"></div></div>
+      </div>
+    </div>
+    <div class="candidate-card dir">
+      <h4>Ronaldo Caiado</h4>
+      <div class="partido">PSD · Ex-Governador de GO · candidato oficial do PSD</div>
+      <p>Quaest (13/mai): <strong>4% no 1º turno</strong> — caiu 2pp desde abril. Candidato oficial do PSD, renunciou GO em março. 2º turno vs Lula: 35% × 44%. Defende anistia ampla incluindo Bolsonaro. Espaço na direita disputado com Flávio.</p>
+      <div class="pesquisa">
+        <span>4% 1º turno (Quaest, 13/mai)</span>
+        <div class="bar-bg"><div class="bar-fill" style="width:8%;background:var(--dir)"></div></div>
+      </div>
+    </div>
+    <div class="candidate-card dir">
+      <h4>Romeu Zema</h4>
+      <div class="partido">Novo · Ex-Governador de MG · pré-candidato</div>
+      <p>Quaest (13/mai): <strong>4% no 1º turno</strong> (+1pp desde abril). O mais competitivo fora da polarização PT×PL. No 2º turno vs Lula: 37% × 44% — a menor desvantagem entre os candidatos da direita fora de Flávio. Mantém candidatura presidencial.</p>
+      <div class="pesquisa">
+        <span>4% 1º turno (Quaest, 13/mai)</span>
+        <div class="bar-bg"><div class="bar-fill" style="width:8%;background:var(--dir)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Análise do Cenário Presidencial</h3>
+    <p style="margin-bottom:8px"><strong>🗳 Quaest 13/mai (mais recente):</strong> Lula sobe para 39% (+2pp) e Flávio segura 33% no 1º turno. A soma dos dois chega a 72% — polarização a pleno vapor. No 2º turno: empate técnico 42% × 41% (±2pp). A reunião com Trump ajudou Lula entre independentes (+5pp desde março), mas não moveu o eleitorado ideológico de nenhum lado.</p>
+    <p style="margin-bottom:8px"><strong>⚖️ Caso Master pressiona Flávio:</strong> A operação da PF contra Ciro Nogueira — cotado para vice de Flávio e articulador da campanha bolsonarista — ainda não impactou as pesquisas, mas mantém o bolsonarismo na defensiva. O estrategista "Marcelão" também apareceu ligado ao escândalo. A decisão sobre a vice de Flávio segue em aberto.</p>
+    <p style="margin-bottom:8px"><strong>🗺 País partido ao meio:</strong> Lula lidera no Nordeste com margens de +33pp (BA) e +34pp (PE). Flávio vence em SP, Sul e Centro-Oeste. MG permanece o "estado-pêndulo" — quem vencer lá desde 1989 vence a eleição — e está tecnicamente aberto. Os independentes decidirão o resultado.</p>
+    <p><strong>📅 O que vem pela frente:</strong> PEC do fim da escala 6x1 vai ao plenário da Câmara em maio — pauta com alta capilaridade popular. Convenções em julho/agosto oficializam candidaturas e vice-presidentes. Tarcísio ainda não confirmou se vai à Presidência ou busca reeleição em SP.</p>
+  </div>
+</section>
+
+<!-- ==================== COLIGAÇÕES ==================== -->
+<section id="coligacoes">
+  <div class="section-title">Coligações e Alinhamentos por Região</div>
+  <div class="section-subtitle">Blocos políticos regionais, espectro ideológico e tendências de aliança</div>
+
+  <div class="alert">
+    <strong>⚠️ Importante:</strong> As coligações formais são definidas nas convenções partidárias (20/jul–5/ago). O que está descrito aqui são os blocos de tendência e pré-articulações já em curso conforme fontes de abril/2026.
+  </div>
+
+  <div class="legend" style="margin-bottom:18px">
+    <div class="legend-item"><span class="badge-esq">Esquerda</span></div>
+    <div class="legend-item"><span class="badge-centro">Centro</span></div>
+    <div class="legend-item"><span class="badge-cdir">Centro-Direita</span></div>
+    <div class="legend-item"><span class="badge-dir">Direita</span></div>
+    <div class="legend-item"><span class="badge-nova">Nova coligação</span></div>
+  </div>
+
+  <div class="grid-2">
+
+    <div class="colig-card">
+      <div class="region-label">🌴 Nordeste</div>
+      <h4>Bloco do Lulismo Nordestino</h4>
+      <p>Região historicamente mais forte do PT. Governos aliados em BA (PT), CE (PT), PI (PT), RN (PT). Palanque consolidado. PT + PSB (PE, PB) formam o núcleo. PSB e PT têm aliança histórica no Nordeste, embora o racha no MA (PSB vs PT) seja ponto de tensão.</p>
+      <div class="tags">
+        <span class="badge-esq">Esquerda</span>
+        <span style="background:#e8f8f5;color:#1a7a5e;border:1px solid #a3e4d7;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;">Coligação histórica</span>
+      </div>
+      <p style="margin-top:10px;font-size:12px;color:var(--muted)"><strong>Estados:</strong> BA, CE, PI, RN (governadores do PT disputam reeleição) | PE, PB (PSB aliado do PT)</p>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">🌴 Nordeste — MA</div>
+      <h4>Maranhão: Racha Histórico PSB × PT</h4>
+      <p>Ponto de tensão único no Nordeste. Carlos Brandão (PSB) encerra mandato; o PSB local rompeu com o PT. A disputa pelo governo abre espaço para reconfiguração de alianças, com o PT podendo buscar candidatura própria ou apoiar um terceiro candidato.</p>
+      <div class="tags">
+        <span class="badge-esq">Esquerda</span>
+        <span class="badge-nova">Nova coligação provável</span>
+      </div>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">🏙 Sudeste — SP</div>
+      <h4>São Paulo: Maior Disputa do País</h4>
+      <p>A batalha mais relevante eleitoralmente. Tarcísio de Freitas (Republicanos) lidera para reeleição. Fernando Haddad (PT) surge como principal opositor. Disputa entre a federação Republicanos+PP vs. frente ampla da esquerda (PT+PSB+PSOL+PDT). Pesquisa Atlas/Estadão indica Tarcísio 49%, Haddad 43%.</p>
+      <div class="tags">
+        <span class="badge-dir">Direita</span>
+        <span class="badge-esq">Esquerda</span>
+        <span class="badge-nova">Nova coligação</span>
+      </div>
+      <p style="margin-top:8px;font-size:12px;color:var(--muted)">Federação Republicanos+PP: nova aliança anunciada recentemente, com viés oposicionista</p>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">🏙 Sudeste — MG</div>
+      <h4>Minas Gerais: Campo Aberto</h4>
+      <p>Zema renunciou; vice Mateus Simões (PSD) deve disputar a reeleição. Oposição ainda sem candidato forte consolidado. Lula e PT tentam ampliar presença em MG, colégios eleitorais crucial. PSD de Mateus Simões busca coligação ampla de centro-direita.</p>
+      <div class="tags">
+        <span class="badge-cdir">Centro-Direita</span>
+        <span class="badge-nova">Nova coligação</span>
+      </div>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">🏙 Sudeste — RJ</div>
+      <h4>Rio de Janeiro: Disputa em Aberto</h4>
+      <p>Cláudio Castro (PL) condenado pelo TSE por abuso de poder; inelegível até 2030, mas pode disputar sub judice. Sem vice no governo, haverá eleição direta ou indireta (STF decide). Eduardo Paes (prefeito do Rio) é favorito para o governo estadual. Campo da direita ainda recompõe candidatura.</p>
+      <div class="tags">
+        <span class="badge-centro">Centro</span>
+        <span class="badge-nova">Nova coligação</span>
+      </div>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">🏙 Sudeste — ES</div>
+      <h4>Espírito Santo: Disputa Aberta</h4>
+      <p>Casagrande (PSB) renunciou para o Senado; vice Ricardo Ferraço assume. Lorenzo Pazolini (Republicanos, prefeito de Vitória) renunciou para disputar o governo. Disputa entre centro-esquerda (PSB) vs. centro-direita (Republicanos).</p>
+      <div class="tags">
+        <span class="badge-centro">Centro</span>
+        <span class="badge-nova">Nova coligação</span>
+      </div>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">🌾 Sul</div>
+      <h4>Bloco da Direita Sulista</h4>
+      <p>Região dominada por partidos de centro-direita e direita. SC: Jorginho Mello (PL) disputa reeleição. RS: Eduardo Leite (PSD) encerra mandato, campo aberto. PR: Ratinho Jr. (PSD) encerra mandato sem candidatura, deixando disputa em aberto. Federação Republicanos+PP tem presença relevante na região.</p>
+      <div class="tags">
+        <span class="badge-dir">Direita</span>
+        <span class="badge-cdir">Centro-Direita</span>
+        <span style="background:#e8f8f5;color:#1a7a5e;border:1px solid #a3e4d7;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;">Coligações em formação</span>
+      </div>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">🌵 Centro-Oeste</div>
+      <h4>Domínio Histórico da Direita / PSD</h4>
+      <p>Caiado (PSD) saiu de GO para a Presidência; vice Daniel Vilela (MDB) assume e deve disputar o governo. MT: Mauro Mendes (União) foi para o Senado; vice Otaviano Pivetta (Republicanos) assume. MS: Eduardo Riedel (PP) disputa reeleição. DF: Celina Leão (PP) assume com Ibaneis indo ao Senado.</p>
+      <div class="tags">
+        <span class="badge-cdir">Centro-Direita</span>
+        <span class="badge-dir">Direita</span>
+        <span class="badge-nova">Nova coligação em GO, MT, DF</span>
+      </div>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">🌳 Norte</div>
+      <h4>Maior Renovação do País</h4>
+      <p>Região com mais troca de governadores: 6 dos 7 estados terão novos nomes (exceto Amapá, onde Clécio pode se reeleger). AC: Mailza Assis (PP, vice, assume). AM: vice assume com Wilson Lima indo ao Senado. PA: vice assume com Barbalho indo ao Senado. RO, RR, TO: todos com troca.</p>
+      <div class="tags">
+        <span class="badge-centro">Centro</span>
+        <span class="badge-cdir">Centro-Direita</span>
+        <span class="badge-nova">Maior renovação regional</span>
+      </div>
+      <p style="margin-top:8px;font-size:12px;color:var(--muted)">Coligações de centro ainda em formação; PT tenta avançar na região com palanque de Lula</p>
+    </div>
+
+    <div class="colig-card">
+      <div class="region-label">📊 Federação Nacional Relevante</div>
+      <h4>Republicanos + PP: Nova Federação Oposicionista</h4>
+      <p>Anunciada em 2025/26, esta federação reúne o partido de Tarcísio (Republicanos, ligado à Igreja Universal) com o PP de Arthur Lira. A aliança tem viés oposicionista ao governo Lula e pode ser estruturante para candidaturas no Sul e Sudeste. É uma nova configuração que não existia na eleição anterior.</p>
+      <div class="tags">
+        <span class="badge-dir">Direita</span>
+        <span class="badge-nova">Nova federação 2025</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================== CALENDÁRIO ==================== -->
+<section id="calendario">
+  <div class="section-title">Calendário Eleitoral 2026</div>
+  <div class="section-subtitle">Principais datas e prazos do processo eleitoral</div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card" style="border-left:4px solid #c0392b">
+        <h3 style="color:#c0392b">✅ Já ocorrido</h3>
+        <ul>
+          <li><strong>Março/2026:</strong> Romeu Zema renuncia ao governo de MG (22/mar)</li>
+          <li><strong>Março/2026:</strong> Ronaldo Caiado renuncia ao governo de GO (31/mar)</li>
+          <li><strong>Março/2026:</strong> Casagrande renuncia ao ES</li>
+          <li><strong>Abril/2026:</strong> Gladson Cameli renuncia ao AC (2/abr)</li>
+          <li><strong>4/abr/2026:</strong> Prazo final de desincompatibilização</li>
+          <li><strong>Abril/2026:</strong> Helder Barbalho renuncia ao PA</li>
+          <li><strong>Abril/2026:</strong> Ibaneis Rocha renuncia ao DF</li>
+          <li><strong>Abril/2026:</strong> Mauro Mendes renuncia ao MT</li>
+          <li><strong>Abril/2026:</strong> João Azevêdo renuncia à PB</li>
+        </ul>
+      </div>
+      <div class="card" style="border-left:4px solid #e67e22;margin-top:0">
+        <h3 style="color:#e67e22">📌 6 de maio de 2026</h3>
+        <p>Prazo final para regularização eleitoral: tirar título pela 1ª vez, transferir domicílio ou corrigir pendências (presencialmente ou pelo TSE digital).</p>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="border-left:4px solid #2980b9">
+        <h3 style="color:#2980b9">📅 Próximas datas</h3>
+        <ul>
+          <li><strong>20/jul – 5/ago/2026:</strong> Convenções partidárias — definição oficial de candidatos, coligações e federações</li>
+          <li><strong>até 15/ago/2026:</strong> Prazo para registro de candidaturas no TSE</li>
+          <li><strong>Agosto/2026:</strong> Início oficial da campanha eleitoral</li>
+          <li><strong>4/out/2026:</strong> 🗳 <strong>1º Turno</strong> — votação das 8h às 17h (horário de Brasília)</li>
+          <li><strong>25/out/2026:</strong> 🗳 <strong>2º Turno</strong> (se necessário para Presidente e Governadores)</li>
+          <li><strong>19/dez/2026:</strong> Diplomação dos eleitos</li>
+          <li><strong>5/jan/2027:</strong> Posse do Presidente da República</li>
+          <li><strong>6/jan/2027:</strong> Posse dos Governadores</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CANDIDATOS A GOVERNADOR ==================== -->
+<section id="candidatos-gov">
+  <div class="section-title">Candidatos a Governador por Estado</div>
+  <div class="section-subtitle">Pré-candidatos confirmados e cotados · ordenação alfabética · partido e espectro · ⚠️ Candidaturas oficiais somente após convenções: 20/jul–5/ago/2026</div>
+
+  <div class="alert">
+    <strong>⚠️ Status em abril/2026:</strong> As candidaturas ainda são <em>pré-candidaturas</em>. As convenções partidárias (20/jul–5/ago) oficializam candidatos e coligações. Pesquisas e articulações continuam mudando até lá.
+  </div>
+
+  <div class="region-tabs">
+    <button class="region-tab active" onclick="filterGov('todos', this)">🇧🇷 Todos</button>
+    <button class="region-tab" onclick="filterGov('nordeste', this)">🌴 Nordeste</button>
+    <button class="region-tab" onclick="filterGov('sudeste', this)">🏙 Sudeste</button>
+    <button class="region-tab" onclick="filterGov('sul', this)">🌾 Sul</button>
+    <button class="region-tab" onclick="filterGov('centrooeste', this)">🌵 Centro-Oeste</button>
+    <button class="region-tab" onclick="filterGov('norte', this)">🌳 Norte</button>
+  </div>
+
+  <div id="gov-cards-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;margin-top:16px"></div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:14px">Fontes: Jota, G1, Metrópoles, Gazeta do Povo, Exame, Congresso em Foco · Abril/2026. 🔵 = Favorito/Situação · 🟡 = Forte Oposição · ⚪ = Demais candidatos</p>
+</section>
+
+<!-- ==================== CANDIDATOS AO SENADO ==================== -->
+<section id="candidatos-sen">
+  <div class="section-title">Candidatos ao Senado por Estado</div>
+  <div class="section-subtitle">2 vagas por estado · 54 cadeiras no total · mandato de 8 anos · ordenação alfabética · ⚠️ Candidaturas oficiais após convenções: 20/jul–5/ago/2026</div>
+
+  <div class="alert">
+    <strong>📌 Contexto:</strong> Em 2026 são renovados 2/3 do Senado (54 das 81 cadeiras). Cada estado elege 2 senadores pelo sistema majoritário simples — os 2 mais votados ganham, sem necessidade de 2º turno. Vários governadores que renunciaram migram para essa disputa.
+  </div>
+
+  <div class="region-tabs">
+    <button class="region-tab active" onclick="filterSen('todos', this)">🇧🇷 Todos</button>
+    <button class="region-tab" onclick="filterSen('nordeste', this)">🌴 Nordeste</button>
+    <button class="region-tab" onclick="filterSen('sudeste', this)">🏙 Sudeste</button>
+    <button class="region-tab" onclick="filterSen('sul', this)">🌾 Sul</button>
+    <button class="region-tab" onclick="filterSen('centrooeste', this)">🌵 Centro-Oeste</button>
+    <button class="region-tab" onclick="filterSen('norte', this)">🌳 Norte</button>
+  </div>
+
+  <div id="sen-cards-container" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;margin-top:16px"></div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:14px">Fontes: Gazeta do Povo, Intercept, Congresso em Foco, G1, Jota · Abril/2026. 🔵 = Favorito · 🟡 = Forte disputa · ⚪ = Demais candidatos. Ex-gov. = ex-governador que migrou para a disputa.</p>
+</section>
+
+
+  Estudo Eleitoral Brasil 2026 · Dados compilados de TSE, G1, Agência Brasil, CNN Brasil, XP Investimentos, Congresso em Foco · Abril/2026<br>
+  Coligações formais serão definidas entre 20/jul e 5/ago/2026 nas convenções partidárias
+</footer>
+
+<script>
+  // ---- Navigation ----
+  function showSection(id) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  // ==================== DASHBOARD JS ====================
+
+  // --- Countdown ---
+  function updateCountdown() {
+    const election = new Date('2026-10-04T08:00:00-03:00');
+    const now = new Date();
+    const diff = election - now;
+    if (diff <= 0) { document.getElementById('countdown').textContent = '🗳 Hoje é o dia!'; return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    document.getElementById('countdown').textContent = `${d} dias · ${h}h · ${m}min`;
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 60000);
+
+  // --- Build dashboard charts after states data is defined ---
+  function buildDashboard() {
+    // ---- 1. Situação dos governadores ----
+    const statusCounts = {};
+    states.forEach(s => { statusCounts[s.status] = (statusCounts[s.status]||0)+1; });
+    const statusConfig = [
+      { key:'reeleicao', label:'Busca Reeleição',        color:'#196f3d', bg:'#d5f5e3' },
+      { key:'novo',      label:'Vice / Candidato Novo',  color:'#1a5276', bg:'#d6eaf8' },
+      { key:'senado',    label:'Migrou para Senado',      color:'#784212', bg:'#fdebd0' },
+      { key:'pres',      label:'Candidato à Presidência', color:'#78281f', bg:'#fadbd8' },
+      { key:'fim',       label:'Encerra Mandato (2º man.)',color:'#555',   bg:'#f2f3f4' },
+    ];
+    const total = states.length;
+    const govChart = document.getElementById('gov-chart');
+    const govLegend = document.getElementById('gov-legend');
+    statusConfig.forEach(cfg => {
+      const n = statusCounts[cfg.key] || 0;
+      if (!n) return;
+      const pct = Math.round(n/total*100);
+      govChart.innerHTML += `
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:90px;font-size:12px;color:#555;flex-shrink:0">${cfg.label}</div>
+          <div style="flex:1;background:#eee;border-radius:6px;height:22px;overflow:hidden">
+            <div style="width:${pct}%;background:${cfg.color};height:100%;border-radius:6px;display:flex;align-items:center;padding:0 8px;transition:width .5s">
+              <span style="font-size:11px;font-weight:700;color:white">${n}</span>
+            </div>
+          </div>
+          <div style="width:36px;font-size:12px;font-weight:700;color:${cfg.color};flex-shrink:0">${pct}%</div>
+        </div>`;
+      govLegend.innerHTML += `<span style="background:${cfg.bg};color:${cfg.color};border:1px solid ${cfg.color}44;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700">${n} ${cfg.label}</span>`;
+    });
+
+    // ---- 2. Espectro ideológico ----
+    const specCounts = { esq:0, centro:0, cdir:0, dir:0 };
+    states.forEach(s => specCounts[s.spec]++);
+    const specConfig = [
+      { key:'esq',   label:'Esquerda',      color:'#c0392b', bg:'#fde8e8' },
+      { key:'centro',label:'Centro',         color:'#b7770d', bg:'#fef9e7' },
+      { key:'cdir',  label:'Centro-Direita', color:'#6c3483', bg:'#f5eef8' },
+      { key:'dir',   label:'Direita',        color:'#1a5276', bg:'#eaf4fb' },
+    ];
+    const specBars = document.getElementById('spec-bars');
+    specConfig.forEach(cfg => {
+      const n = specCounts[cfg.key];
+      const pct = Math.round(n/total*100);
+      specBars.innerHTML += `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+          <div style="width:100px;font-size:12px;color:#555;flex-shrink:0">${cfg.label}</div>
+          <div style="flex:1;background:#eee;border-radius:6px;height:22px;overflow:hidden">
+            <div style="width:${pct}%;background:${cfg.color};height:100%;border-radius:6px;display:flex;align-items:center;padding:0 8px">
+              <span style="font-size:11px;font-weight:700;color:white">${n} estados</span>
+            </div>
+          </div>
+          <div style="width:36px;font-size:12px;font-weight:700;color:${cfg.color};flex-shrink:0">${pct}%</div>
+        </div>`;
+    });
+
+    // ---- 3. Destino dos que saíram ----
+    const destinoEl = document.getElementById('destino-chart');
+    const saidos = states.filter(s => s.status !== 'reeleicao' && s.status !== 'fim');
+    const ficam  = states.filter(s => s.status === 'reeleicao');
+    const encerra = states.filter(s => s.status === 'fim');
+    const doSenado = states.filter(s => s.status === 'senado');
+    const doPres = states.filter(s => s.status === 'pres');
+    const doNovo = states.filter(s => s.status === 'novo');
+
+    destinoEl.innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:#d5f5e3;border-radius:10px;padding:14px;text-align:center">
+          <div style="font-size:28px;font-weight:800;color:#196f3d">${ficam.length}</div>
+          <div style="font-size:12px;color:#196f3d;font-weight:600">Disputam reeleição</div>
+          <div style="font-size:11px;color:#555;margin-top:4px">${ficam.map(s=>s.uf).join(' · ')}</div>
+        </div>
+        <div style="background:#fdebd0;border-radius:10px;padding:14px;text-align:center">
+          <div style="font-size:28px;font-weight:800;color:#784212">${doSenado.length}</div>
+          <div style="font-size:12px;color:#784212;font-weight:600">Migraram p/ Senado</div>
+          <div style="font-size:11px;color:#555;margin-top:4px">${doSenado.map(s=>s.uf).join(' · ')}</div>
+        </div>
+        <div style="background:#fadbd8;border-radius:10px;padding:14px;text-align:center">
+          <div style="font-size:28px;font-weight:800;color:#78281f">${doPres.length}</div>
+          <div style="font-size:12px;color:#78281f;font-weight:600">Candidatos à Presidência</div>
+          <div style="font-size:11px;color:#555;margin-top:4px">${doPres.map(s=>s.uf).join(' · ')}</div>
+        </div>
+        <div style="background:#d6eaf8;border-radius:10px;padding:14px;text-align:center">
+          <div style="font-size:28px;font-weight:800;color:#1a5276">${doNovo.length}</div>
+          <div style="font-size:12px;color:#1a5276;font-weight:600">Vice / candidato novo</div>
+          <div style="font-size:11px;color:#555;margin-top:4px">${doNovo.map(s=>s.uf).join(' · ')}</div>
+        </div>
+      </div>
+      <div style="background:#f2f3f4;border-radius:10px;padding:12px;text-align:center;margin-top:10px">
+        <div style="font-size:22px;font-weight:800;color:#555">${encerra.length}</div>
+        <div style="font-size:12px;color:#555;font-weight:600">Encerram mandato sem candidatura (2º mandato)</div>
+        <div style="font-size:11px;color:#777;margin-top:4px">${encerra.map(s=>s.uf).join(' · ')}</div>
+      </div>
+    `;
+
+    // ---- 4. Vagas por cargo ----
+    const totalDepFed = states.reduce((a,s)=>a+s.depFed,0);
+    const totalDepEst = states.reduce((a,s)=>a+s.depEst,0);
+    const vagasData = [
+      { label:'Deputados Federais',          n:totalDepFed, color:'#002776', nota:'513 vagas — SP lidera com 70' },
+      { label:'Dep. Estaduais / Distritais', n:totalDepEst, color:'#8e44ad', nota:'1.059 vagas — SP tem 94' },
+      { label:'Senadores',                   n:54,           color:'#c0392b', nota:'54 vagas — 2 por estado/DF' },
+      { label:'Governadores',               n:27,            color:'#009C3B', nota:'27 chapas — 1 por estado/DF' },
+      { label:'Presidente da República',    n:1,             color:'#e67e22', nota:'1 chapa — 1º e/ou 2º turno' },
+    ];
+    const maxV = Math.max(...vagasData.map(v=>v.n));
+    const vagasChart = document.getElementById('vagas-chart');
+    vagasData.forEach(v => {
+      const pct = Math.round(v.n/maxV*100);
+      vagasChart.innerHTML += `
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+            <span style="font-size:12px;font-weight:600;color:#333">${v.label}</span>
+            <span style="font-size:12px;font-weight:800;color:${v.color}">${v.n.toLocaleString('pt-BR')}</span>
+          </div>
+          <div style="background:#eee;border-radius:6px;height:18px;overflow:hidden">
+            <div style="width:${pct}%;background:${v.color};height:100%;border-radius:6px"></div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${v.nota}</div>
+        </div>`;
+    });
+  }
+
+  // ==================== ESTADOS JS ====================
+  // depFed = vagas Câmara Federal por estado (TSE)
+  // depEst = vagas Assembleia Legislativa estadual
+  // senado = 2 vagas por estado (todos em 2026)
+  // motivo = por que o governador saiu ou ficou
+  const states = [
+    {
+      uf:'AC', nome:'Acre', regiao:'norte',
+      gov:'Mailza Assis (vice)', partido:'PP', spec:'cdir', status:'novo',
+      motivo:'Gladson Cameli (PP) renunciou em 2/abr/2026. Ele estava no 2º mandato consecutivo e não poderia disputar a reeleição. Optou por renunciar para concorrer ao Senado Federal.',
+      candidato:'Mailza Assis (PP) assumiu o governo e pode disputar o cargo. Cameli vai ao Senado.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'AL', nome:'Alagoas', regiao:'nordeste',
+      gov:'Paulo Dantas', partido:'MDB', spec:'centro', status:'fim',
+      motivo:'Paulo Dantas cumpre o 2º mandato consecutivo e é constitucionalmente impedido de disputar a reeleição. Não anunciou candidatura a nenhum outro cargo.',
+      candidato:'Campo aberto no MDB/centro. Disputa interna em formação para sucessão.',
+      depFed:9, depEst:27, senado:2
+    },
+    {
+      uf:'AM', nome:'Amazonas', regiao:'norte',
+      gov:'Tadeu de Souza (vice)', partido:'Avante', spec:'dir', status:'senado',
+      motivo:'Wilson Lima (União Brasil) renunciou ao cargo em 4/abr/2026 para disputar o Senado Federal. Estava no 2º mandato e não poderia mais ser governador. Vice Tadeu de Souza (Avante) assumiu.',
+      candidato:'Tadeu de Souza (Avante) assume e deve disputar o governo. Campo da direita/centro-direita em formação.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'AP', nome:'Amapá', regiao:'norte',
+      gov:'Clécio Luís', partido:'União Brasil', spec:'centro', status:'reeleicao',
+      motivo:'Clécio Luís está no 1º mandato e tem direito à reeleição. Permanece no cargo durante a campanha.',
+      candidato:'Clécio Luís (União Brasil) busca reeleição. Único governador do Norte com direito à reeleição.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'BA', nome:'Bahia', regiao:'nordeste',
+      gov:'Jerônimo Rodrigues', partido:'PT', spec:'esq', status:'reeleicao',
+      motivo:'Jerônimo Rodrigues está no 1º mandato e tem direito à reeleição. Permanece no cargo.',
+      candidato:'Jerônimo Rodrigues (PT) busca reeleição. PT tem domínio histórico na Bahia desde 2007.',
+      depFed:39, depEst:63, senado:2
+    },
+    {
+      uf:'CE', nome:'Ceará', regiao:'nordeste',
+      gov:'Elmano de Freitas', partido:'PT', spec:'esq', status:'reeleicao',
+      motivo:'Elmano de Freitas está no 1º mandato e tem direito à reeleição. Permanece no cargo.',
+      candidato:'Elmano de Freitas (PT) busca reeleição. Aliança PT+PDT relevante no estado.',
+      depFed:22, depEst:46, senado:2
+    },
+    {
+      uf:'DF', nome:'Distrito Federal', regiao:'centrooeste',
+      gov:'Celina Leão (vice)', partido:'PP', spec:'cdir', status:'novo',
+      motivo:'Ibaneis Rocha (MDB) renunciou em abr/2026 para concorrer ao Senado Federal. Estava no 2º mandato e era impedido de disputar a reeleição ao governo.',
+      candidato:'Celina Leão (PP) assume e deve disputar o governo. Ibaneis Rocha migra para a disputa ao Senado.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'ES', nome:'Espírito Santo', regiao:'sudeste',
+      gov:'Ricardo Ferraço (vice)', partido:'PSD', spec:'centro', status:'novo',
+      motivo:'Renato Casagrande (PSB) renunciou em março/2026 para concorrer ao Senado. Estava no 2º mandato consecutivo, impedido de disputar reeleição ao governo.',
+      candidato:'Ferraço (PSD, vice) deve disputar o governo. Lorenzo Pazolini (Republicanos, ex-prefeito de Vitória) também renunciou e é adversário forte.',
+      depFed:10, depEst:30, senado:2
+    },
+    {
+      uf:'GO', nome:'Goiás', regiao:'centrooeste',
+      gov:'Daniel Vilela (vice)', partido:'MDB', spec:'centro', status:'novo',
+      motivo:'Ronaldo Caiado (PSD) renunciou em 31/mar/2026 para concorrer à Presidência da República. Estava no 2º mandato e não poderia disputar reeleição ao governo.',
+      candidato:'Daniel Vilela (MDB, vice) assume e deve disputar o governo. Disputa de centro-direita em formação.',
+      depFed:17, depEst:41, senado:2
+    },
+    {
+      uf:'MA', nome:'Maranhão', regiao:'nordeste',
+      gov:'Carlos Brandão', partido:'PSB', spec:'esq', status:'fim',
+      motivo:'Carlos Brandão cumpre o 2º mandato consecutivo (assumiu no lugar de Flávio Dino) e é impedido de disputar reeleição. Não anunciou candidatura para outros cargos.',
+      candidato:'Disputa aberta com racha PSB×PT. Dois campos da esquerda podem lançar candidatos distintos.',
+      depFed:18, depEst:42, senado:2
+    },
+    {
+      uf:'MG', nome:'Minas Gerais', regiao:'sudeste',
+      gov:'Mateus Simões (vice)', partido:'PSD', spec:'cdir', status:'novo',
+      motivo:'Romeu Zema (Novo) renunciou em 22/mar/2026 para concorrer à Presidência da República. Havia cumprido dois mandatos consecutivos e já seria impedido de reeleição ao governo.',
+      candidato:'Mateus Simões (PSD, vice) deve disputar o governo. PT busca candidato forte; MG é colégio eleitoral decisivo.',
+      depFed:53, depEst:77, senado:2
+    },
+    {
+      uf:'MS', nome:'Mato Grosso do Sul', regiao:'centrooeste',
+      gov:'Eduardo Riedel', partido:'PP', spec:'cdir', status:'reeleicao',
+      motivo:'Eduardo Riedel está no 1º mandato e tem direito à reeleição. Permanece no cargo.',
+      candidato:'Eduardo Riedel (PP) busca reeleição. Estado de perfil agroindustrial e centro-direita.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'MT', nome:'Mato Grosso', regiao:'centrooeste',
+      gov:'Otaviano Pivetta (vice)', partido:'Republicanos', spec:'dir', status:'novo',
+      motivo:'Mauro Mendes (União Brasil) renunciou em abr/2026 para concorrer ao Senado Federal. Estava no 2º mandato consecutivo e era impedido de disputar reeleição ao governo.',
+      candidato:'Otaviano Pivetta (Republicanos, vice) assume e pode disputar o governo. Mauro Mendes vai ao Senado.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'PA', nome:'Pará', regiao:'norte',
+      gov:'Hana Ghassan (vice)', partido:'MDB', spec:'centro', status:'senado',
+      motivo:'Helder Barbalho (MDB) renunciou em 2/abr/2026 para concorrer ao Senado Federal. Estava no 2º mandato. A vice-governadora Hana Ghassan (MDB) assumiu o governo em cerimônia no Hangar, Belém.',
+      candidato:'Hana Ghassan (MDB) assume e é indicada por Barbalho como candidata ao governo. Barbalho é favorito para o Senado. COP30 em Belém projeta o grupo politicamente.',
+      depFed:17, depEst:41, senado:2
+    },
+    {
+      uf:'PB', nome:'Paraíba', regiao:'nordeste',
+      gov:'Lucas Ribeiro (vice)', partido:'PP', spec:'esq', status:'senado',
+      motivo:'João Azevêdo (PSB) renunciou em abr/2026 para concorrer ao Senado Federal. Estava no 2º mandato. O vice Lucas Ribeiro (PP) assumiu o governo.',
+      candidato:'Lucas Ribeiro (PP) assume. Campo do PSB local tenta manter a posição com candidato próprio.',
+      depFed:12, depEst:36, senado:2
+    },
+    {
+      uf:'PE', nome:'Pernambuco', regiao:'nordeste',
+      gov:'Raquel Lyra', partido:'PSD', spec:'centro', status:'reeleicao',
+      motivo:'Raquel Lyra está no 1º mandato e tem direito à reeleição. Permanece no cargo.',
+      candidato:'Raquel Lyra (PSD) busca reeleição. Aliança estratégica com João Campos (PSB, prefeito do Recife).',
+      depFed:25, depEst:49, senado:2
+    },
+    {
+      uf:'PI', nome:'Piauí', regiao:'nordeste',
+      gov:'Rafael Fonteles', partido:'PT', spec:'esq', status:'reeleicao',
+      motivo:'Rafael Fonteles está no 1º mandato e tem direito à reeleição. Permanece no cargo.',
+      candidato:'Rafael Fonteles (PT) busca reeleição. Piauí é reduto histórico do PT.',
+      depFed:10, depEst:30, senado:2
+    },
+    {
+      uf:'PR', nome:'Paraná', regiao:'sul',
+      gov:'Ratinho Junior', partido:'PSD', spec:'cdir', status:'fim',
+      motivo:'Ratinho Junior cumpre o 2º mandato consecutivo e é constitucionalmente impedido de reeleição. Havia sido cotado para a Presidência pelo PSD, mas desistiu em março/2026. Permanece no cargo até o fim.',
+      candidato:'Disputa aberta no PSD e aliados. Nomes internos do grupo político de Ratinho Jr. devem disputar.',
+      depFed:30, depEst:54, senado:2
+    },
+    {
+      uf:'RJ', nome:'Rio de Janeiro', regiao:'sudeste',
+      gov:'(Situação especial – STF decide)', partido:'PL', spec:'dir', status:'novo',
+      motivo:'Cláudio Castro (PL) renunciou em mar/2026 para disputar o Senado, mas foi condenado pelo TSE por abuso de poder político/econômico nas eleições de 2022, sendo declarado inelegível até 2030. Como não havia vice-governador em exercício (nomeado para o TCE-RJ), o STF deverá decidir entre eleição direta ou indireta pelos deputados estaduais.',
+      candidato:'Eduardo Paes (MDB, ex-prefeito do Rio) é favorito para governador. Campo da direita ainda busca candidato competitivo.',
+      depFed:46, depEst:70, senado:2
+    },
+    {
+      uf:'RN', nome:'Rio Grande do Norte', regiao:'nordeste',
+      gov:'Fátima Bezerra', partido:'PT', spec:'esq', status:'fim',
+      motivo:'Fátima Bezerra cumpre o 2º mandato consecutivo e é impedida de disputar reeleição. Havia planos de ir ao Senado, mas seu vice se recusou a assumir o governo para viabilizar a saída dela.',
+      candidato:'Candidatura aberta no campo da esquerda. PT e aliados em reorganização para o governo do RN.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'RO', nome:'Rondônia', regiao:'norte',
+      gov:'Marcos Rocha', partido:'PSD', spec:'cdir', status:'fim',
+      motivo:'Marcos Rocha cumpre o 2º mandato consecutivo e é impedido de disputar reeleição. Não anunciou candidatura a outros cargos.',
+      candidato:'Campo centro-direita em reorganização. Disputa interna no PSD e aliados.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'RR', nome:'Roraima', regiao:'norte',
+      gov:'Edilson Damião (vice)', partido:'União Brasil', spec:'dir', status:'novo',
+      motivo:'Antonio Denarium (PP) renunciou em março/2026 para concorrer ao Senado. Denarium e Damião respondem a processo de cassação no TSE por abuso de poder político e econômico em 2022.',
+      candidato:'Edilson Damião (União Brasil, vice) assume. Disputa ao governo e ao Senado permanecem juridicamente incertas devido aos processos no TSE.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'RS', nome:'Rio Grande do Sul', regiao:'sul',
+      gov:'Eduardo Leite', partido:'PSD', spec:'cdir', status:'fim',
+      motivo:'Eduardo Leite cumpre o 2º mandato consecutivo (foi reeleito em 2022) e é impedido de disputar reeleição. Disputou a indicação presidencial do PSD mas foi preterido por Ronaldo Caiado. Permanece no cargo até o fim.',
+      candidato:'Campo centro-direita em reorganização. Nomes como Ricardo Ferraço e Lorenzo Pazolini (ES) foram cogitados; RS terá disputa interna no PSD.',
+      depFed:31, depEst:55, senado:2
+    },
+    {
+      uf:'SC', nome:'Santa Catarina', regiao:'sul',
+      gov:'Jorginho Mello', partido:'PL', spec:'dir', status:'reeleicao',
+      motivo:'Jorginho Mello está no 1º mandato e tem direito à reeleição. Permanece no cargo.',
+      candidato:'Jorginho Mello (PL) busca reeleição. SC é um dos estados mais à direita do país. Carol de Toni (PL) cotada para o Senado.',
+      depFed:16, depEst:40, senado:2
+    },
+    {
+      uf:'SE', nome:'Sergipe', regiao:'nordeste',
+      gov:'Fábio Mitidieri', partido:'PSD', spec:'centro', status:'reeleicao',
+      motivo:'Fábio Mitidieri está no 1º mandato e tem direito à reeleição. Permanece no cargo.',
+      candidato:'Fábio Mitidieri (PSD) busca reeleição.',
+      depFed:8, depEst:24, senado:2
+    },
+    {
+      uf:'SP', nome:'São Paulo', regiao:'sudeste',
+      gov:'Tarcísio de Freitas', partido:'Republicanos', spec:'dir', status:'reeleicao',
+      motivo:'Tarcísio de Freitas está no 1º mandato e tem direito à reeleição. Permanece no cargo. Apesar de ser apontado como presidenciável, sinalizou disputar a reeleição em SP.',
+      candidato:'Tarcísio de Freitas (Republicanos) busca reeleição. Fernando Haddad (PT) é o principal oponente. A maior e mais disputada eleição estadual do país. Pesquisa Atlas: Tarcísio 49%, Haddad 43%.',
+      depFed:70, depEst:94, senado:2
+    },
+    {
+      uf:'TO', nome:'Tocantins', regiao:'norte',
+      gov:'Wanderlei Barbosa', partido:'Republicanos', spec:'dir', status:'fim',
+      motivo:'Wanderlei Barbosa cumpre o 2º mandato (assumiu no lugar de Mauro Carlesse) e é impedido de disputar reeleição. Não anunciou candidatura para outros cargos.',
+      candidato:'Disputa aberta; campo de direita predomina no estado.',
+      depFed:8, depEst:24, senado:2
+    },
+  ].sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+
+  const specBadge = { esq:'badge-esq', centro:'badge-centro', cdir:'badge-cdir', dir:'badge-dir' };
+  const statusLabel = {
+    reeleicao:'🟢 Busca Reeleição',
+    novo:'🔵 Vice / Candidato Novo',
+    senado:'🟠 Migrou p/ Senado',
+    pres:'🔴 Candidato à Presidência',
+    fim:'⚫ Encerra Mandato'
+  };
+  const statusBadge = { reeleicao:'status-reeleicao', novo:'status-novo', senado:'status-senado', pres:'status-pres', fim:'status-fim' };
+  const regiaoLabel = { centrooeste:'Centro-Oeste', nordeste:'Nordeste', sudeste:'Sudeste', norte:'Norte', sul:'Sul' };
+
+  function renderTable(filter) {
+    const body = document.getElementById('stateBody');
+    const data = filter === 'todos' ? states : states.filter(s => s.regiao === filter);
+    body.innerHTML = data.map(s => `
+      <tr data-region="${s.regiao}">
+        <td><strong>${s.uf}</strong></td>
+        <td><strong>${s.nome}</strong></td>
+        <td style="font-size:12px;color:var(--muted);white-space:nowrap">${regiaoLabel[s.regiao]}</td>
+        <td style="font-size:13px"><strong>${s.gov}</strong><br><span style="font-size:11px;color:var(--muted)">${s.partido}</span></td>
+        <td><span class="${specBadge[s.spec]}" style="white-space:nowrap">${s.spec==='esq'?'Esquerda':s.spec==='centro'?'Centro':s.spec==='cdir'?'Centro-Dir.':'Direita'}</span></td>
+        <td><span class="${statusBadge[s.status]}" style="white-space:nowrap;font-size:11px">${statusLabel[s.status]}</span></td>
+        <td style="font-size:12px;color:#444;max-width:220px">${s.motivo}</td>
+        <td style="font-size:12px;color:#333;max-width:220px">${s.candidato}</td>
+        <td style="text-align:center;font-weight:700;color:var(--azul)">${s.depFed}</td>
+        <td style="text-align:center;font-weight:700;color:#8e44ad">${s.depEst}</td>
+        <td style="text-align:center;font-weight:700;color:#c0392b">2</td>
+      </tr>
+    `).join('');
+  }
+
+  function filterRegion(region, btn) {
+    document.querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderTable(region);
+  }
+
+  // ==================== CANDIDATOS A GOVERNADOR ====================
+  // fav = favorito/situação  |  opp = forte oposição  |  out = outros
+  const govCandidatos = [
+    { uf:'AC', nome:'Acre', regiao:'norte', candidatos:[
+      { nome:'Mailza Assis', partido:'PP', tipo:'fav', perfil:'Vice-governadora que assumiu após renúncia de Cameli. Candidata natural da situação.', coligacao:'PP + aliados (centro-direita)' },
+      { nome:'Marcus Alexandre', partido:'MDB', tipo:'opp', perfil:'Ex-prefeito de Rio Branco. Principal nome da oposição de centro.', coligacao:'MDB + PT (esquerda/centro)' },
+    ]},
+    { uf:'AL', nome:'Alagoas', regiao:'nordeste', candidatos:[
+      { nome:'Renan Filho', partido:'MDB', tipo:'fav', perfil:'Ministro dos Transportes, ex-governador de AL. Pré-candidato de volta ao governo.', coligacao:'MDB + PT + aliados (centro-esquerda)' },
+      { nome:'A definir', partido:'PL/direita', tipo:'opp', perfil:'Campo da direita ainda articula candidatura; PL e aliados em formação.', coligacao:'Em formação' },
+    ]},
+    { uf:'AM', nome:'Amazonas', regiao:'norte', candidatos:[
+      { nome:'Tadeu de Souza', partido:'Avante', tipo:'fav', perfil:'Vice-governador que assumiu após renúncia de Wilson Lima. Candidato natural da situação.', coligacao:'Avante + União Brasil + aliados' },
+      { nome:'Capitão Alberto Neto', partido:'PL', tipo:'opp', perfil:'Deputado federal, principal nome do bolsonarismo no AM.', coligacao:'PL + aliados (direita)' },
+      { nome:'Eduardo Braga', partido:'MDB', tipo:'out', perfil:'Ex-governador e senador. Pode retornar à disputa estadual.', coligacao:'MDB (centro)' },
+    ]},
+    { uf:'AP', nome:'Amapá', regiao:'norte', candidatos:[
+      { nome:'Clécio Luís', partido:'União Brasil', tipo:'fav', perfil:'Governador em exercício buscando reeleição. Único do Norte com direito à reeleição.', coligacao:'União Brasil + aliados (centro)' },
+      { nome:'Dr. Furlan', partido:'PSD', tipo:'opp', perfil:'Ex-prefeito de Macapá, renunciou para disputar o governo.', coligacao:'PSD + aliados (centro-direita)' },
+    ]},
+    { uf:'BA', nome:'Bahia', regiao:'nordeste', candidatos:[
+      { nome:'Jerônimo Rodrigues', partido:'PT', tipo:'fav', perfil:'Governador em exercício buscando reeleição. PT governa BA desde 2007.', coligacao:'PT + PCdoB + PV + Rede + PDT (esquerda ampla)' },
+      { nome:'ACM Neto', partido:'União Brasil', tipo:'opp', perfil:'Ex-prefeito de Salvador, ex-deputado federal. Principal liderança da oposição baiana.', coligacao:'União Brasil + PL + PP + Republicanos (direita/centro-direita)' },
+    ]},
+    { uf:'CE', nome:'Ceará', regiao:'nordeste', candidatos:[
+      { nome:'Elmano de Freitas', partido:'PT', tipo:'fav', perfil:'Governador em exercício buscando reeleição. Herdeiro político do grupo Lula–Ciro–Camilo.', coligacao:'PT + PDT + PSB + PCdoB (esquerda)' },
+      { nome:'Capitão Wagner', partido:'União Brasil', tipo:'opp', perfil:'Ex-deputado federal, líder da oposição cearense. Candidato consolidado.', coligacao:'União Brasil + PL + PP + Republicanos (direita)' },
+    ]},
+    { uf:'DF', nome:'Distrito Federal', regiao:'centrooeste', candidatos:[
+      { nome:'Celina Leão', partido:'PP', tipo:'fav', perfil:'Vice-governadora que assumiu após renúncia de Ibaneis. Candidata natural da situação.', coligacao:'PP + Republicanos + aliados (centro-direita)' },
+      { nome:'Bia Kicis', partido:'PL', tipo:'opp', perfil:'Deputada federal, bolsonarista. Forte no eleitorado de direita do DF.', coligacao:'PL + aliados (direita)' },
+      { nome:'Leila do Vôlei', partido:'PDT', tipo:'out', perfil:'Senadora, ex-atleta. Pode disputar o governo ou a reeleição ao Senado.', coligacao:'PDT + aliados (centro)' },
+    ]},
+    { uf:'ES', nome:'Espírito Santo', regiao:'sudeste', candidatos:[
+      { nome:'Lorenzo Pazolini', partido:'Republicanos', tipo:'fav', perfil:'Ex-prefeito de Vitória, renunciou para disputar o governo. Lidera pesquisas.', coligacao:'Republicanos + PP + aliados (centro-direita)' },
+      { nome:'Ricardo Ferraço', partido:'PSD', tipo:'fav', perfil:'Vice-governador que assumiu. Pesquisas mostram empate técnico com Pazolini.', coligacao:'PSD + MDB + aliados (centro)' },
+      { nome:'Aridelmo Teixeira', partido:'PT', tipo:'opp', perfil:'Principal nome petista para o governo capixaba.', coligacao:'PT + PSB + PCdoB (esquerda)' },
+    ]},
+    { uf:'GO', nome:'Goiás', regiao:'centrooeste', candidatos:[
+      { nome:'Daniel Vilela', partido:'MDB', tipo:'fav', perfil:'Vice-governador que assumiu após renúncia de Caiado. Lidera pesquisas com 42%+.', coligacao:'MDB + PSD + aliados (centro)' },
+      { nome:'Gustavo Gayer', partido:'PL', tipo:'opp', perfil:'Deputado federal bolsonarista. Principal alternativa da direita radical.', coligacao:'PL + aliados (direita)' },
+      { nome:'Adriana Accorsi', partido:'PT', tipo:'out', perfil:'Deputada federal. Representa o campo petista em GO.', coligacao:'PT + PSB + aliados (esquerda)' },
+    ]},
+    { uf:'MA', nome:'Maranhão', regiao:'nordeste', candidatos:[
+      { nome:'A definir (PSB)', partido:'PSB', tipo:'fav', perfil:'PSB local tenta manter o governo. Brandão encerra mandato sem candidato definido.', coligacao:'PSB + aliados (centro-esquerda)' },
+      { nome:'A definir (PT)', partido:'PT', tipo:'opp', perfil:'Racha PSB×PT: o PT pode lançar candidato próprio após o rompimento local.', coligacao:'PT + aliados (esquerda)' },
+      { nome:'Eduardo Braide', partido:'PSD', tipo:'out', perfil:'Prefeito de São Luís, renunciou para disputar o governo.', coligacao:'PSD + aliados (centro-direita)' },
+    ]},
+    { uf:'MG', nome:'Minas Gerais', regiao:'sudeste', candidatos:[
+      { nome:'Cleitinho', partido:'Republicanos', tipo:'fav', perfil:'Quaest (28/abr): Lidera com ≥15pp de vantagem em todos os cenários. Venceria todos no 2º turno. Pode migrar para o governo em vez de buscar reeleição ao Senado.', coligacao:'Republicanos + PP (centro-direita)' },
+      { nome:'Rodrigo Pacheco', partido:'PSD→MDB?', tipo:'opp', perfil:'Quaest (28/abr): 17%. Sem Cleitinho, empata com Kalil. Lula o apoia para o governo de MG. Ainda não definiu rumo.', coligacao:'MDB + PT? (centro-esquerda)' },
+      { nome:'Alexandre Kalil', partido:'PDT', tipo:'opp', perfil:'Quaest (28/abr): 19%. Sem Cleitinho, empata tecnicamente com Pacheco. Ex-prefeito de BH, campo de esquerda/centro.', coligacao:'PDT + aliados (esquerda)' },
+      { nome:'Mateus Simões (vice-gov.)', partido:'PSD', tipo:'out', perfil:'Quaest (28/abr): 12%. Herdeiro natural do grupo Zema, mas terceiro colocado atrás de Cleitinho e Kalil/Pacheco.', coligacao:'PSD + Novo + aliados (centro-direita)' },
+    ]},
+    { uf:'MS', nome:'Mato Grosso do Sul', regiao:'centrooeste', candidatos:[
+      { nome:'Eduardo Riedel', partido:'PP', tipo:'fav', perfil:'Governador em exercício buscando reeleição. Pesquisas apontam 50%+ no 1º turno.', coligacao:'PP + PSD + aliados (centro-direita)' },
+      { nome:'Fábio Trad', partido:'PT', tipo:'opp', perfil:'Ex-deputado federal. Principal nome da esquerda no MS.', coligacao:'PT + PSB + aliados (esquerda)' },
+    ]},
+    { uf:'MT', nome:'Mato Grosso', regiao:'centrooeste', candidatos:[
+      { nome:'Otaviano Pivetta', partido:'Republicanos', tipo:'fav', perfil:'Vice-governador que assumiu após renúncia de Mauro Mendes. Candidato da situação.', coligacao:'Republicanos + PP + aliados (direita)' },
+      { nome:'Wellington Fagundes', partido:'PL', tipo:'opp', perfil:'Senador, bem posicionado em pesquisas para o governo do MT.', coligacao:'PL + aliados (direita)' },
+    ]},
+    { uf:'PA', nome:'Pará', regiao:'norte', candidatos:[
+      { nome:'Hana Ghassan', partido:'MDB', tipo:'fav', perfil:'Quaest (27/abr): Empatada com Daniel Santos dentro da margem ±3pp. Vice-governadora indicada por Barbalho. Perfil técnico; nunca disputou eleição majoritária.', coligacao:'MDB + PT + aliados (centro-esquerda)' },
+      { nome:'Daniel Santos', partido:'Podemos', tipo:'opp', perfil:'Quaest (27/abr): Empatado com Hana (±3pp). Prefeito de Ananindeua, aliado de Alckmin/PSB. Principal ameaça ao grupo de Barbalho.', coligacao:'Podemos + PSB + aliados (esquerda)' },
+      { nome:'Zequinha Marinho', partido:'PL', tipo:'out', perfil:'Ex-senador, perdeu para Barbalho em 2022. Tenta novamente pelo campo da direita.', coligacao:'PL + aliados (direita)' },
+    ]},
+    { uf:'PB', nome:'Paraíba', regiao:'nordeste', candidatos:[
+      { nome:'Cícero Lucena', partido:'sem partido→PSD?', tipo:'fav', perfil:'Prefeito de João Pessoa. Lidera pesquisas com 34%; renunciou para disputar o governo.', coligacao:'PSD + aliados (centro-direita)' },
+      { nome:'Lucas Ribeiro', partido:'PP', tipo:'opp', perfil:'Vice-governador que assumiu. Disputa com Cícero Lucena pelo centro-direita.', coligacao:'PP + PSB local? (centro)' },
+      { nome:'Efraim Filho', partido:'União Brasil', tipo:'out', perfil:'Senador, empatado tecnicamente com Lucas Ribeiro nas pesquisas.', coligacao:'União Brasil (centro-direita)' },
+    ]},
+    { uf:'PE', nome:'Pernambuco', regiao:'nordeste', candidatos:[
+      { nome:'João Campos', partido:'PSB', tipo:'fav', perfil:'Prefeito do Recife, 59% nas pesquisas. Grande favorito; renunciou para disputar o governo.', coligacao:'PSB + PT + PCdoB + PDT (esquerda ampla)' },
+      { nome:'Raquel Lyra', partido:'PSD', tipo:'opp', perfil:'Governadora em exercício buscando reeleição. Aparece com 24% frente à força de Campos.', coligacao:'PSD + MDB + aliados (centro)' },
+    ]},
+    { uf:'PI', nome:'Piauí', regiao:'nordeste', candidatos:[
+      { nome:'Rafael Fonteles', partido:'PT', tipo:'fav', perfil:'Governador em exercício buscando reeleição. PT domina o PI há décadas.', coligacao:'PT + PCdoB + PDT + aliados (esquerda)' },
+      { nome:'A definir (PL/direita)', partido:'PL', tipo:'opp', perfil:'Campo da direita ainda articula candidatura ao governo do PI.', coligacao:'PL + aliados (direita)' },
+    ]},
+    { uf:'PR', nome:'Paraná', regiao:'sul', candidatos:[
+      { nome:'Sergio Moro', partido:'União Brasil', tipo:'fav', perfil:'Quaest (27/abr): 35% (6 candidatos) ou 42% (4 candidatos). Vence todos no 2º turno: 49% × 30% (Requião) e 44% × 29% (Greca). Liderança consolidada.', coligacao:'União Brasil + PP (federação) — negociação em curso' },
+      { nome:'Requião Filho', partido:'PDT', tipo:'opp', perfil:'Quaest (27/abr): 18–24%. Principal adversário de Moro. Líder de rejeição com 47%. Perderia para Moro no 2º turno.', coligacao:'PDT + aliados (centro-esquerda)' },
+      { nome:'Rafael Greca', partido:'MDB', tipo:'out', perfil:'Quaest (27/abr): 15%. Ex-prefeito de Curitiba. Perde para Moro no 2º turno (44% × 29%).', coligacao:'MDB + aliados (centro)' },
+    ]},
+    { uf:'RJ', nome:'Rio de Janeiro', regiao:'sudeste', candidatos:[
+      { nome:'Eduardo Paes', partido:'PSD', tipo:'fav', perfil:'Paraná Pesquisas (24/abr): Paes lidera com ~40pp de vantagem. Quaest (27/abr): 34% no estimulado. Venceria Ruas no 2º turno. Aprov. Castro despencou para 35%.', coligacao:'MDB + PT + PSB + aliados (centro-esquerda)' },
+      { nome:'Douglas Ruas', partido:'PL', tipo:'opp', perfil:'Dep. estadual, indicado por Flávio Bolsonaro. 9–10% nas pesquisas (Quaest/Paraná Pesquisas). Principal adversário de Paes.', coligacao:'PL + PP + aliados (direita)' },
+      { nome:'Wilson Witzel', partido:'a definir', tipo:'out', perfil:'Ex-governador cassado. Manifesta interesse em disputar, mas com barreiras jurídicas.', coligacao:'Em articulação' },
+    ]},
+    { uf:'RN', nome:'Rio Grande do Norte', regiao:'nordeste', candidatos:[
+      { nome:'Natália Bonavides', partido:'PT→PSOL?', tipo:'fav', perfil:'Deputada federal petista. Campo da esquerda tenta manter o governo após Fátima Bezerra.', coligacao:'PT + PSOL + PCdoB + aliados (esquerda)' },
+      { nome:'Rogério Marinho', partido:'PL', tipo:'opp', perfil:'Senador bolsonarista. Bem cotado para o governo do RN pela direita.', coligacao:'PL + aliados (direita)' },
+    ]},
+    { uf:'RO', nome:'Rondônia', regiao:'norte', candidatos:[
+      { nome:'A definir (PSD)', partido:'PSD', tipo:'fav', perfil:'Marcos Rocha encerra mandato; grupo político tenta indicar sucessor pelo PSD.', coligacao:'PSD + aliados (centro-direita)' },
+      { nome:'Marcos Rogério', partido:'PL', tipo:'opp', perfil:'Senador, cotado para o governo ou reeleição ao Senado.', coligacao:'PL + aliados (direita)' },
+    ]},
+    { uf:'RR', nome:'Roraima', regiao:'norte', candidatos:[
+      { nome:'Edilson Damião', partido:'União Brasil', tipo:'fav', perfil:'Vice-governador que assumiu após renúncia de Denarium. Situação juridicamente incerta.', coligacao:'União Brasil + PP (direita/centro-direita)' },
+      { nome:'A definir (oposição)', partido:'MDB/PT', tipo:'opp', perfil:'Campo de oposição ainda sem candidato consolidado.', coligacao:'Em formação' },
+    ]},
+    { uf:'RS', nome:'Rio Grande do Sul', regiao:'sul', candidatos:[
+      { nome:'Juliana Brizola', partido:'PDT', tipo:'fav', perfil:'Neta de Leonel Brizola. Candidata do PDT, símbolo histórico do trabalhismo gaúcho.', coligacao:'PDT + PT + aliados (centro-esquerda)' },
+      { nome:'Luciano Zucco', partido:'PL', tipo:'opp', perfil:'Deputado federal, indicado por Bolsonaro. Candidato do PL.', coligacao:'PL + Novo + aliados (direita)' },
+      { nome:'Edegar Pretto', partido:'PT', tipo:'out', perfil:'Deputado federal, presidente da Conab. Pré-candidato petista ao governo gaúcho.', coligacao:'PT + PCdoB + aliados (esquerda)' },
+    ]},
+    { uf:'SC', nome:'Santa Catarina', regiao:'sul', candidatos:[
+      { nome:'Jorginho Mello', partido:'PL', tipo:'fav', perfil:'Governador em exercício buscando reeleição. Estado de perfil fortemente à direita.', coligacao:'PL + PP + Republicanos (direita)' },
+      { nome:'Décio Lima', partido:'PT', tipo:'opp', perfil:'Ex-prefeito de Florianópolis. Principal nome da esquerda em SC.', coligacao:'PT + PDT + PSB + aliados (esquerda)' },
+    ]},
+    { uf:'SE', nome:'Sergipe', regiao:'nordeste', candidatos:[
+      { nome:'Fábio Mitidieri', partido:'PSD', tipo:'fav', perfil:'Governador em exercício buscando reeleição. Lidera pesquisas com 47%+.', coligacao:'PSD + MDB + PP + aliados (centro)' },
+      { nome:'Valmir de Francisquinho', partido:'PL', tipo:'opp', perfil:'Prefeito de Itabaiana, bolsonarista. Principal adversário de Mitidieri.', coligacao:'PL + aliados (direita)' },
+    ]},
+    { uf:'SP', nome:'São Paulo', regiao:'sudeste', candidatos:[
+      { nome:'Tarcísio de Freitas', partido:'Republicanos', tipo:'fav', perfil:'Governador buscando reeleição. Vox Brasil (26/abr): 48,2% no 1º turno, 54,2% no 2º. Aprovação: 68,2%. A maior disputa do país.', coligacao:'Republicanos + PP (federação) + PL + aliados (direita)' },
+      { nome:'Fernando Haddad', partido:'PT', tipo:'opp', perfil:'Ex-ministro da Fazenda, pré-candidato confirmado. Vox Brasil: 32,3% no 1º turno, 34,6% no 2º. Rejeição 45,6% vs 22,2% de Tarcísio.', coligacao:'PT + PSB + PSOL + PDT + PCdoB (esquerda ampla)' },
+      { nome:'Erika Hilton', partido:'PSOL', tipo:'out', perfil:'Vereadora de SP, representante da esquerda jovem. Pode compor chapa petista.', coligacao:'PSOL + PT (esquerda)' },
+    ]},
+    { uf:'TO', nome:'Tocantins', regiao:'norte', candidatos:[
+      { nome:'A definir (Republicanos/direita)', partido:'Republicanos', tipo:'fav', perfil:'Wanderlei Barbosa encerra mandato. Grupo de direita tenta manter o governo.', coligacao:'Republicanos + aliados (direita)' },
+      { nome:'A definir (PT/esquerda)', partido:'PT', tipo:'opp', perfil:'Campo petista em formação. Lula tenta ampliar presença no Norte.', coligacao:'PT + aliados (esquerda)' },
+    ]},
+  ].sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+
+  // ==================== CANDIDATOS AO SENADO ====================
+  const senCandidatos = [
+    { uf:'AC', nome:'Acre', regiao:'norte', senAtual:['Marcio Bittar (UB)','Alan Rick (União)'], candidatos:[
+      { nome:'Gladson Cameli', partido:'PP', tipo:'fav', perfil:'Ex-governador, renunciou para disputar o Senado. Grande favorito.', destaque:'ex-gov.' },
+      { nome:'Mailza Assis', partido:'PP', tipo:'out', perfil:'Vice-gov. que assumiu; pode migrar para o Senado se não disputar o governo.', destaque:'' },
+    ]},
+    { uf:'AL', nome:'Alagoas', regiao:'nordeste', senAtual:['Renan Calheiros (MDB)','Rodrigo Cunha (Podemos)'], candidatos:[
+      { nome:'Renan Calheiros', partido:'MDB', tipo:'fav', perfil:'Senador buscando reeleição. Cacique histórico da política alagoana.', destaque:'reeleição' },
+      { nome:'Renan Filho', partido:'MDB', tipo:'out', perfil:'Ministro dos Transportes; migra para o governo, não o Senado.', destaque:'' },
+      { nome:'A definir (direita)', partido:'PL/Podemos', tipo:'opp', perfil:'Campo da direita articula candidatura para a 2ª vaga.', destaque:'' },
+    ]},
+    { uf:'AM', nome:'Amazonas', regiao:'norte', senAtual:['Omar Aziz (PSD)','Marcos Rogério (PL)'], candidatos:[
+      { nome:'Wilson Lima', partido:'União Brasil', tipo:'fav', perfil:'Ex-governador, renunciou para disputar o Senado.', destaque:'ex-gov.' },
+      { nome:'Capitão Alberto Neto', partido:'PL', tipo:'opp', perfil:'Deputado federal bolsonarista, cotado para Senado ou governo.', destaque:'' },
+    ]},
+    { uf:'AP', nome:'Amapá', regiao:'norte', senAtual:['Randolfe Rodrigues (PT)','Davi Alcolumbre (União)'], candidatos:[
+      { nome:'Davi Alcolumbre', partido:'União Brasil', tipo:'fav', perfil:'Senador buscando reeleição. Ex-presidente do Senado. Grande favorito.', destaque:'reeleição' },
+      { nome:'A definir (oposição)', partido:'PL', tipo:'opp', perfil:'Campo da direita busca candidato competitivo no AP.', destaque:'' },
+    ]},
+    { uf:'BA', nome:'Bahia', regiao:'nordeste', senAtual:['Jaques Wagner (PT)','Angelo Coronel (PSD)'], candidatos:[
+      { nome:'Jaques Wagner', partido:'PT', tipo:'fav', perfil:'Senador e ex-governador buscando reeleição. PT hegemônico na BA.', destaque:'reeleição' },
+      { nome:'ACM Neto', partido:'União Brasil', tipo:'opp', perfil:'Pode disputar o Senado caso não vá ao governo. Principal liderança da oposição.', destaque:'' },
+      { nome:'Otto Alencar', partido:'PSD', tipo:'opp', perfil:'Senador atual não disputa reeleição (fim de mandato). PSD indica sucessor.', destaque:'' },
+    ]},
+    { uf:'CE', nome:'Ceará', regiao:'nordeste', senAtual:['Camilo Santana (PT)','Eduardo Girão (Novo)'], candidatos:[
+      { nome:'Camilo Santana', partido:'PT', tipo:'fav', perfil:'Ministro da Educação e ex-governador. Favorito absoluto ao Senado pelo CE.', destaque:'ministro→Senado' },
+      { nome:'Eduardo Girão', partido:'Novo', tipo:'opp', perfil:'Senador buscando reeleição. Perfil conservador, discurso anticorrupção.', destaque:'reeleição' },
+      { nome:'Capitão Wagner', partido:'União Brasil', tipo:'out', perfil:'Pode migrar para o Senado se não disputar o governo.', destaque:'' },
+    ]},
+    { uf:'DF', nome:'Distrito Federal', regiao:'centrooeste', senAtual:['Damares Alves (Republicanos)','Izalci Lucas (PL)'], candidatos:[
+      { nome:'Ibaneis Rocha', partido:'MDB', tipo:'fav', perfil:'Ex-governador, renunciou para disputar o Senado. Alinhado ao bolsonarismo.', destaque:'ex-gov.' },
+      { nome:'Izalci Lucas', partido:'PL', tipo:'fav', perfil:'Senador buscando reeleição. Direita radical.', destaque:'reeleição' },
+      { nome:'Bia Kicis', partido:'PL', tipo:'opp', perfil:'Deputada federal; pode ir ao Senado se não disputar o governo.', destaque:'' },
+    ]},
+    { uf:'ES', nome:'Espírito Santo', regiao:'sudeste', senAtual:['Magno Malta (PL)','Marcos Do Val (Podemos)'], candidatos:[
+      { nome:'Renato Casagrande', partido:'PSB', tipo:'fav', perfil:'Ex-governador, renunciou para disputar o Senado. Grande favorito da esquerda/centro.', destaque:'ex-gov.' },
+      { nome:'Magno Malta', partido:'PL', tipo:'opp', perfil:'Senador buscando reeleição. Bolsonarista histórico.', destaque:'reeleição' },
+      { nome:'Gilvan da Federal', partido:'PL', tipo:'out', perfil:'Deputado federal, cotado pelo PL para o Senado capixaba.', destaque:'' },
+    ]},
+    { uf:'GO', nome:'Goiás', regiao:'centrooeste', senAtual:['Vanderlan Cardoso (PSD)','Jorge Kajuru (PSB)'], candidatos:[
+      { nome:'Gracinha Caiado', partido:'União Brasil', tipo:'fav', perfil:'Primeira-dama, esposa de Ronaldo Caiado. Lidera pesquisas internas do grupo político.', destaque:'' },
+      { nome:'Wilder Morais', partido:'PL', tipo:'opp', perfil:'Senador atual, pode buscar reeleição. Bolsonarista de GO.', destaque:'reeleição?' },
+      { nome:'Gustavo Gayer', partido:'PL', tipo:'out', perfil:'Deputado federal, disputa o Senado ou governo estadual.', destaque:'' },
+    ]},
+    { uf:'MA', nome:'Maranhão', regiao:'nordeste', senAtual:['Weverton Rocha (PDT)','Wellington Dias (PT, licenciado)'], candidatos:[
+      { nome:'Carlos Brandão', partido:'PSB', tipo:'out', perfil:'Ex-governador encerra mandato; pode disputar Senado dependendo da configuração local.', destaque:'' },
+      { nome:'Wellington Dias', partido:'PT', tipo:'fav', perfil:'Ministro licenciado, ex-governador. Pode retornar ao Senado.', destaque:'ministro' },
+      { nome:'A definir (direita)', partido:'PL/União', tipo:'opp', perfil:'Campo da direita em formação para o Senado maranhense.', destaque:'' },
+    ]},
+    { uf:'MG', nome:'Minas Gerais', regiao:'sudeste', senAtual:['Carlos Viana (Podemos)','Cleitinho (Republicanos)'], candidatos:[
+      { nome:'Rodrigo Pacheco', partido:'PSD→?', tipo:'fav', perfil:'Presidente do Senado. Pode disputar o governo ou reeleição ao Senado. Lula o apoia.', destaque:'presidente Senado' },
+      { nome:'Cleitinho', partido:'Republicanos', tipo:'opp', perfil:'Senador buscando reeleição. Pode migrar para o governo. Bem nas pesquisas.', destaque:'reeleição?' },
+      { nome:'Carlos Viana', partido:'Podemos', tipo:'out', perfil:'Senador em fim de mandato. Pode buscar reeleição ou cargo executivo.', destaque:'fim mandato' },
+    ]},
+    { uf:'MS', nome:'Mato Grosso do Sul', regiao:'centrooeste', senAtual:['Nelsinho Trad (PSD)','Soraya Thronicke (Podemos)'], candidatos:[
+      { nome:'Nelsinho Trad', partido:'PSD', tipo:'out', perfil:'Senador em fim de mandato. Pode buscar reeleição.', destaque:'fim mandato' },
+      { nome:'Soraya Thronicke', partido:'Podemos', tipo:'opp', perfil:'Senadora em fim de mandato. Perfil de centro-direita liberal. Pode buscar reeleição.', destaque:'fim mandato' },
+      { nome:'A definir (PT)', partido:'PT', tipo:'out', perfil:'Campo petista articulando candidatura ao Senado pelo MS.', destaque:'' },
+    ]},
+    { uf:'MT', nome:'Mato Grosso', regiao:'centrooeste', senAtual:['Confúcio Moura (MDB)','Marcos Rogério (PL)'], candidatos:[
+      { nome:'Mauro Mendes', partido:'União Brasil', tipo:'fav', perfil:'Ex-governador, renunciou para disputar o Senado. Grande favorito.', destaque:'ex-gov.' },
+      { nome:'Wellington Fagundes', partido:'PL', tipo:'opp', perfil:'Senador, lidera pesquisas para o governo ou Senado do MT.', destaque:'' },
+    ]},
+    { uf:'PA', nome:'Pará', regiao:'norte', senAtual:['Beto Faro (PT)','Jader Filho (MDB)'], candidatos:[
+      { nome:'Helder Barbalho', partido:'MDB', tipo:'fav', perfil:'Ex-governador, renunciou para disputar o Senado. Favorito absoluto, com projeção da COP30.', destaque:'ex-gov.' },
+      { nome:'Zequinha Marinho', partido:'PL', tipo:'opp', perfil:'Ex-senador, cotado para 2ª vaga pela direita.', destaque:'' },
+    ]},
+    { uf:'PB', nome:'Paraíba', regiao:'nordeste', senAtual:['Daniella Ribeiro (PP)','Efraim Filho (União)'], candidatos:[
+      { nome:'João Azevêdo', partido:'PSB', tipo:'fav', perfil:'Ex-governador, renunciou para disputar o Senado. Grande favorito.', destaque:'ex-gov.' },
+      { nome:'Efraim Filho', partido:'União Brasil', tipo:'opp', perfil:'Senador buscando reeleição. Empatado nas pesquisas com Lucas Ribeiro para o governo.', destaque:'reeleição?' },
+    ]},
+    { uf:'PE', nome:'Pernambuco', regiao:'nordeste', senAtual:['Fernando Dueire (MDB)','Humberto Costa (PT)'], candidatos:[
+      { nome:'João Campos', partido:'PSB', tipo:'out', perfil:'Prefeito do Recife; prefere o governo estadual, não o Senado.', destaque:'' },
+      { nome:'Humberto Costa', partido:'PT', tipo:'fav', perfil:'Senador buscando reeleição. Histórico do PT em PE.', destaque:'reeleição' },
+      { nome:'A definir (direita)', partido:'PL/União', tipo:'opp', perfil:'Campo da direita articula candidatura ao Senado pernambucano.', destaque:'' },
+    ]},
+    { uf:'PI', nome:'Piauí', regiao:'nordeste', senAtual:['Ciro Nogueira (PP)','Wellington Dias (PT)'], candidatos:[
+      { nome:'Wellington Dias', partido:'PT', tipo:'fav', perfil:'Ministro licenciado. Pode disputar o Senado ou reassumir o cargo após convenções.', destaque:'ministro' },
+      { nome:'Ciro Nogueira', partido:'PP', tipo:'opp', perfil:'Senador buscando reeleição. Principal liderança da direita piauiense.', destaque:'reeleição' },
+    ]},
+    { uf:'PR', nome:'Paraná', regiao:'sul', senAtual:['Sergio Moro (União)','Oriovisto Guimarães (Podemos)'], candidatos:[
+      { nome:'Sergio Moro', partido:'União Brasil', tipo:'out', perfil:'Senador que lidera as pesquisas para o governo; pode migrar para o Executivo.', destaque:'candidato a gov.' },
+      { nome:'Carol de Toni', partido:'PL', tipo:'fav', perfil:'Deputada federal, bolsonarista de SC migrou para PR. Cotada para Senado.', destaque:'' },
+      { nome:'Alexandre Curi', partido:'PSD', tipo:'opp', perfil:'Deputado estadual, cotado para a 2ª vaga pelo grupo de Ratinho Jr.', destaque:'' },
+    ]},
+    { uf:'RJ', nome:'Rio de Janeiro', regiao:'sudeste', senAtual:['Flávio Bolsonaro (PL)','Carlos Portinho (PL, suplente)'], candidatos:[
+      { nome:'Flávio Bolsonaro', partido:'PL', tipo:'out', perfil:'Senador e presidenciável. Pode disputar a Presidência ou buscar reeleição ao Senado.', destaque:'presidenciável' },
+      { nome:'Cláudio Castro', partido:'PL', tipo:'fav', perfil:'Ex-governador, inelegível pelo TSE até 2030. Disputará sub judice.', destaque:'ex-gov. (sub judice)' },
+      { nome:'Eduardo Paes', partido:'MDB', tipo:'out', perfil:'Prefeito do Rio; prefere o governo estadual.', destaque:'' },
+    ]},
+    { uf:'RN', nome:'Rio Grande do Norte', regiao:'nordeste', senAtual:['Zenaide Maia (Pros)','Styvenson Valentim (Podemos)'], candidatos:[
+      { nome:'Fátima Bezerra', partido:'PT', tipo:'fav', perfil:'Governadora em fim de mandato. Tinha planos para o Senado, bloqueados pelo vice. Campo em reorganização.', destaque:'ex-gov.?' },
+      { nome:'Rogério Marinho', partido:'PL', tipo:'opp', perfil:'Senador, bem cotado. Pode disputar o governo ou reeleição ao Senado.', destaque:'reeleição?' },
+    ]},
+    { uf:'RO', nome:'Rondônia', regiao:'norte', senAtual:['Marcos Rogério (PL)','Confúcio Moura (MDB)'], candidatos:[
+      { nome:'Marcos Rogério', partido:'PL', tipo:'fav', perfil:'Senador buscando reeleição. Bolsonarista. Também cotado para o governo.', destaque:'reeleição' },
+      { nome:'A definir (campo Marcos Rocha)', partido:'PSD', tipo:'opp', perfil:'Grupo do governador articula candidatura para a 2ª vaga.', destaque:'' },
+    ]},
+    { uf:'RR', nome:'Roraima', regiao:'norte', senAtual:['Hiran Gonçalves (PP)','Chico Rodrigues (União)'], candidatos:[
+      { nome:'Antonio Denarium', partido:'PP', tipo:'fav', perfil:'Ex-governador, renunciou para disputar o Senado. Processo de cassação no TSE em aberto.', destaque:'ex-gov. (sub judice)' },
+      { nome:'A definir (oposição)', partido:'MDB', tipo:'opp', perfil:'Campo de oposição articula candidatura para a 2ª vaga.', destaque:'' },
+    ]},
+    { uf:'RS', nome:'Rio Grande do Sul', regiao:'sul', senAtual:['Paulo Paim (PT)','Luis Carlos Heinze (PP)'], candidatos:[
+      { nome:'Sanderson', partido:'PL', tipo:'fav', perfil:'Deputado federal, indicado por Bolsonaro. Candidato confirmado do PL ao Senado gaúcho.', destaque:'' },
+      { nome:'Manuela D\'Ávila', partido:'PSOL', tipo:'opp', perfil:'Jornalista, ex-deputada e ex-candidata à vice-presidência. Candidata do PSOL na chapa de Brizola.', destaque:'' },
+      { nome:'Frederico Antunes', partido:'PP', tipo:'out', perfil:'Deputado estadual há 28 anos, sétimo mandato. Estreia no Senado.', destaque:'' },
+    ]},
+    { uf:'SC', nome:'Santa Catarina', regiao:'sul', senAtual:['Esperidião Amin (PP)','Dário Berger (MDB)'], candidatos:[
+      { nome:'Carol de Toni', partido:'PL', tipo:'fav', perfil:'Deputada federal, foi cotada para Senado por SC. Carlos Bolsonaro também migrou para SC.', destaque:'' },
+      { nome:'Carlos Bolsonaro', partido:'PL', tipo:'fav', perfil:'Ex-vereador do RJ, migrou para SC para disputar o Senado pelo estado.', destaque:'' },
+      { nome:'Esperidião Amin', partido:'PP', tipo:'opp', perfil:'Senador buscando reeleição. Veterano da política catarinense.', destaque:'reeleição' },
+    ]},
+    { uf:'SE', nome:'Sergipe', regiao:'nordeste', senAtual:['Alessandro Vieira (MDB)','Rogério Carvalho (PT)'], candidatos:[
+      { nome:'Rogério Carvalho', partido:'PT', tipo:'fav', perfil:'Senador buscando reeleição. Campo petista forte em SE.', destaque:'reeleição' },
+      { nome:'Alessandro Vieira', partido:'MDB', tipo:'opp', perfil:'Senador buscando reeleição. Perfil reformista de centro.', destaque:'reeleição' },
+    ]},
+    { uf:'SP', nome:'São Paulo', regiao:'sudeste', senAtual:['Mara Gabrilli (PSD)','Marcos Pontes (PL)'], candidatos:[
+      { nome:'Simone Tebet', partido:'PSB', tipo:'fav', perfil:'Ministra, ex-presidenciável. Cotada pelo campo governista para o Senado por SP.', destaque:'ministra' },
+      { nome:'Marina Silva', partido:'Rede', tipo:'fav', perfil:'Ministra do Meio Ambiente. Cotada para o Senado, dialoga com PT e PSOL.', destaque:'ministra' },
+      { nome:'Guilherme Derrite', partido:'PP', tipo:'opp', perfil:'Secretário de Segurança Pública de SP. Nome da direita para o Senado.', destaque:'' },
+      { nome:'Baleia Rossi', partido:'MDB', tipo:'out', perfil:'Presidente do MDB. Disputará Senado pelo campo do centro.', destaque:'' },
+      { nome:'Márcio França', partido:'PSB', tipo:'out', perfil:'Ex-governador de SP. Candidato do PSB ao Senado paulista.', destaque:'' },
+    ]},
+    { uf:'TO', nome:'Tocantins', regiao:'norte', senAtual:['Eduardo Gomes (PL)','Irajá (PSD)'], candidatos:[
+      { nome:'Eduardo Gomes', partido:'PL', tipo:'fav', perfil:'Senador buscando reeleição. Direita dominante no TO.', destaque:'reeleição' },
+      { nome:'A definir (grupo Wanderlei)', partido:'Republicanos', tipo:'opp', perfil:'Grupo do governador indica candidato para manter influência local.', destaque:'' },
+    ]},
+  ].sort((a,b) => a.nome.localeCompare(b.nome, 'pt-BR'));
+
+  // ---- Render Gov Candidatos ----
+  function renderGovCards(filter) {
+    const container = document.getElementById('gov-cards-container');
+    const data = filter === 'todos' ? govCandidatos : govCandidatos.filter(s => s.regiao === filter);
+    const tipoIcon = { fav:'🔵', opp:'🟡', out:'⚪' };
+    const tipoLabel = { fav:'Favorito/Situação', opp:'Forte Oposição', out:'Outros' };
+    container.innerHTML = data.map(s => `
+      <div class="card" style="padding:16px;margin-bottom:0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div>
+            <span style="font-size:18px;font-weight:800;color:var(--azul)">${s.uf}</span>
+            <span style="font-size:13px;color:var(--muted);margin-left:6px">${s.nome}</span>
+          </div>
+          <span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--muted);background:#f0f4ff;padding:3px 8px;border-radius:10px">${regiaoLabel[s.regiao]}</span>
+        </div>
+        ${s.candidatos.map(c => `
+          <div style="background:${c.tipo==='fav'?'#f0f7ff':c.tipo==='opp'?'#fffbf0':'#f9f9f9'};border:1px solid ${c.tipo==='fav'?'#bdd7f8':c.tipo==='opp'?'#ffe0a0':'#e8e8e8'};border-radius:8px;padding:10px;margin-bottom:7px">
+            <div style="display:flex;align-items:flex-start;gap:8px">
+              <span style="font-size:16px;flex-shrink:0">${tipoIcon[c.tipo]}</span>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:14px">${c.nome} <span style="font-size:11px;color:var(--muted);font-weight:400">(${c.partido})</span></div>
+                <div style="font-size:11px;color:#666;margin:3px 0">${c.perfil}</div>
+                <div style="font-size:11px;color:#888;font-style:italic">🤝 ${c.coligacao}</div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  function filterGov(region, btn) {
+    document.querySelectorAll('#candidatos-gov .region-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    renderGovCards(region);
+  }
+
+  // ---- Render Senado Candidatos ----
+  function renderSenCards(filter) {
+    const container = document.getElementById('sen-cards-container');
+    const data = filter === 'todos' ? senCandidatos : senCandidatos.filter(s => s.regiao === filter);
+    const tipoIcon = { fav:'🔵', opp:'🟡', out:'⚪' };
+    container.innerHTML = data.map(s => `
+      <div class="card" style="padding:16px;margin-bottom:0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div>
+            <span style="font-size:18px;font-weight:800;color:var(--azul)">${s.uf}</span>
+            <span style="font-size:13px;color:var(--muted);margin-left:6px">${s.nome}</span>
+          </div>
+          <span style="font-size:10px;font-weight:600;text-transform:uppercase;color:var(--muted);background:#f0f4ff;padding:3px 8px;border-radius:10px">${regiaoLabel[s.regiao]}</span>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">📋 Senadores atuais (mandato finda 2026): ${s.senAtual.join(' · ')}</div>
+        ${s.candidatos.map(c => `
+          <div style="background:${c.tipo==='fav'?'#f0f7ff':c.tipo==='opp'?'#fffbf0':'#f9f9f9'};border:1px solid ${c.tipo==='fav'?'#bdd7f8':c.tipo==='opp'?'#ffe0a0':'#e8e8e8'};border-radius:8px;padding:10px;margin-bottom:7px">
+            <div style="display:flex;align-items:flex-start;gap:8px">
+              <span style="font-size:16px;flex-shrink:0">${tipoIcon[c.tipo]}</span>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:14px">${c.nome} <span style="font-size:11px;color:var(--muted);font-weight:400">(${c.partido})</span>
+                  ${c.destaque ? `<span style="background:#fef9e7;color:#9a5e00;border:1px solid #f9e4aa;padding:1px 7px;border-radius:12px;font-size:10px;font-weight:700;margin-left:4px">${c.destaque}</span>` : ''}
+                </div>
+                <div style="font-size:11px;color:#666;margin-top:3px">${c.perfil}</div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  renderTable('todos');
+  buildDashboard();
+  renderGovCards('todos');
+  renderSenCards('todos');
+
+</script>
+</body>
+</html>
